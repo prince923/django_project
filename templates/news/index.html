@@ -1,0 +1,254 @@
+{% extends 'base/base_side.html' %}
+
+{% block link %}
+    <link rel="stylesheet" href="{% static 'css/news/index.css' %}">
+{% endblock %}
+
+
+{% block title %}
+index
+{% endblock %}
+
+{% block content %}
+
+<!-- main start -->
+
+    <!-- main-contain start  -->
+    <div class="main-contain">
+      <!-- banner start -->
+        <div class="banner">
+            <ul class="pic">
+                <!--淡入淡出banner-->
+
+
+                <li><a href="javascript:void(0);"><img src="{% static 'images/linux.jpg' %}" alt="test"></a></li>
+
+
+                <li><a href="javascript:void(0);"><img src="{% static  'images/python_gui.jpg'%}" alt="test"></a></li>
+
+
+                <li><a href="javascript:void(0);"><img src="{% static 'images/python_function.jpg' %}" alt="test"></a></li>
+
+
+                <li><a href="javascript:void(0);"><img src="{% static '/images/python_advanced.jpg' %}" alt="test"></a></li>
+
+
+                <li><a href="javascript:void(0);"><img src="{% static  '/images/jichujiaochen.jpeg' %}" alt="test"></a></li>
+
+
+                <li><a href="javascript:void(0);"><img src="{% static '/images/python_web.jpg' %}" alt="test"></a></li>
+
+
+            </ul>
+            <a href="javascript:void(0);" class="btn prev">
+                <i class="PyWhich py-arrow-left"></i></a>
+            <a href="javascript:void(0);" class="btn next">
+                <i class="PyWhich py-arrow-right"></i></a>
+            <ul class="tab">
+                <!-- 按钮数量必须和图片一致 -->
+
+
+                <li></li>
+
+
+                <li></li>
+
+
+                <li></li>
+
+
+                <li></li>
+
+
+                <li></li>
+
+
+                <li></li>
+
+
+            </ul>
+        </div>
+      <!-- banner end -->
+
+      <!-- content start -->
+      <div class="content">
+        <!-- recommend-news start -->
+          <ul class="recommend-news">
+              <li>
+                  <a href="https://www.shiguangkey.com/course/2432" target="_blank">
+                      <div class="recommend-thumbnail">
+                          <img src="{% static '/images/python_gui.jpg' %}" alt="title">
+                      </div>
+                      <p class="info">Python GUI 教程 25行代码写一个小闹钟</p>
+                  </a>
+              </li>
+
+              <li>
+                  <a href="https://www.shiguangkey.com/course/2432" target="_blank">
+                      <div class="recommend-thumbnail">
+                          <img src="{% static '/images/python_advanced.jpg' %}" alt="title">
+                      </div>
+                      <p class="info">python高性能编程方法一</p>
+                  </a>
+              </li>
+
+              <li>
+                  <a href="https://www.shiguangkey.com/course/2432" target="_blank">
+                      <div class="recommend-thumbnail">
+                          <img src="{% static '/images/jichujiaochen.jpeg' %}" alt="title">
+                      </div>
+                      <p class="info">python基础 split 和 join函数比较</p>
+                  </a>
+              </li>
+          </ul>
+        <!-- recommend-news end -->
+
+        <!--  news-nav start-->
+          <nav class="news-nav">
+              <ul class="clearfix">
+                  <li class="active"><a href="javascript:void(0)">最新资讯</a></li>
+
+                  <li><a href="javascript:void(0)" data-id="1">python框架</a>
+                  </li>
+
+                  <li><a href="javascript:void(0)" data-id="2">Python基础</a>
+                  </li>
+
+                  <li><a href="javascript:void(0)" data-id="3">Python高级</a>
+                  </li>
+
+                  <li><a href="javascript:void(0)" data-id="4">Python函数</a>
+                  </li>
+
+                  <li><a href="javascript:void(0)" data-id="5">PythonGUI</a>
+                  </li>
+
+                  <li><a href="javascript:void(0)" data-id="6">Linux教程</a>
+                  </li>
+
+              </ul>
+          </nav>
+        <!--  news-nav end -->
+
+        <!-- news-contain start -->
+          <div class="news-contain">
+              <ul class="news-list">
+
+                  <li class="news-item">
+                      <a href="https://www.shiguangkey.com/course/2432" class="news-thumbnail"
+                         target="_blank">
+                          <img src="{% static '/images/linux.jpg' %}" alt="linux查找文件或目录命令"
+                               title="linux查找文件或目录命令">
+                      </a>
+                      <div class="news-content">
+                          <h4 class="news-title"><a
+                                  href="#">linux查找文件或目录命令</a>
+                          </h4>
+                          <p class="news-details">linux查找文件或目录命令，前提：知道文件或者目录的具体名字，例如：sphinx.conffind 查找find / -name
+                              dirname 查找目录find -name...</p>
+                          <div class="news-other">
+                              <span class="news-type">Linux教程</span>
+                              <span class="news-time">11/11 18:24</span>
+                              <span class="news-author">python</span>
+                          </div>
+                      </div>
+                  </li>
+
+                  <li class="news-item">
+                      <a href="https://www.shiguangkey.com/course/2432" class="news-thumbnail"
+                         target="_blank">
+                          <img src="{% static '/images/linux.jpg' %}" alt="linux下svn命令的使用"
+                               title="linux下svn命令的使用">
+                      </a>
+                      <div class="news-content">
+                          <h4 class="news-title"><a
+                                  href="https://www.shiguangkey.com/course/2432/887">linux下svn命令的使用</a>
+                          </h4>
+                          <p class="news-details">1、将文件checkout到本地目录svn checkout path（path是服务器上的目录） 例如：svn checkout
+                              svn://192.168.1.1/pro/domain 简写：svn co2、往版本库中添加新的文件 svn addfile 例如：svn add te...</p>
+                          <div class="news-other">
+                              <span class="news-type">Linux教程</span>
+                              <span class="news-time">11/11 18:24</span>
+                              <span class="news-author">python</span>
+                          </div>
+                      </div>
+                  </li>
+
+                  <li class="news-item">
+                      <a href="https://www.shiguangkey.com/course/2432" class="news-thumbnail"
+                         target="_blank">
+                          <img src="{% static '/images/linux.jpg' %}" alt="实现linux和windows文件传输"
+                               title="实现linux和windows文件传输">
+                      </a>
+                      <div class="news-content">
+                          <h4 class="news-title"><a
+                                  href="https://www.shiguangkey.com/course/2432/886">实现linux和windows文件传输</a>
+                          </h4>
+                          <p class="news-details">
+                              其实这个题目有点大，这里介绍的只是linux和windows文件传输中的一种，但是这种方法却非常实用，那就是：ZModem协议具体是linux命令是：rz...</p>
+                          <div class="news-other">
+                              <span class="news-type">Linux教程</span>
+                              <span class="news-time">11/11 18:24</span>
+                              <span class="news-author">python</span>
+                          </div>
+                      </div>
+                  </li>
+
+                  <li class="news-item">
+                      <a href="https://www.shiguangkey.com/course/2432" class="news-thumbnail"
+                         target="_blank">
+                          <img src="{% static '/images/linux.jpg' %}" alt=".htaccess配置详解"
+                               title=".htaccess配置详解">
+                      </a>
+                      <div class="news-content">
+                          <h4 class="news-title"><a
+                                  href="https://www.shiguangkey.com/course/2432">.htaccess配置详解</a>
+                          </h4>
+                          <p class="news-details">　　.htaccess文件设置基础教程 如果你设置好了比如常用的404页面 301重定向 页面还有500页面等会设置了
+                              无非对你的seo技术有很大帮助那么 .htaccess文件到底怎么设置呢　　- .htaccess 文件(或者&quot;分布式...</p>
+                          <div class="news-other">
+                              <span class="news-type">Linux教程</span>
+                              <span class="news-time">11/11 18:24</span>
+                              <span class="news-author">python</span>
+                          </div>
+                      </div>
+                  </li>
+
+                  <li class="news-item">
+                      <a href="https://www.shiguangkey.com/course/2432" class="news-thumbnail"
+                         target="_blank">
+                          <img src="{% static '/images/linux.jpg' %}" alt="使用nohup命令让linux程序后台运行"
+                               title="使用nohup命令让linux程序后台运行">
+                      </a>
+                      <div class="news-content">
+                          <h4 class="news-title"><a
+                                  href="https://www.shiguangkey.com/course/2432">使用nohup命令让linux程序后台运行</a>
+                          </h4>
+                          <p class="news-details">使用nohup让程序永远后台运行Unix/Linux下一般比如想让某个程序在后台运行，很多都是使用 &amp;
+                              在程序结尾来让程序自动运行。比如我们要运行mysql在后台：/usr/local/mysql/bin/mysqld_safe --user=mysql &amp;但是...</p>
+                          <div class="news-other">
+                              <span class="news-type">Linux教程</span>
+                              <span class="news-time">11/11 18:24</span>
+                              <span class="news-author">python</span>
+                          </div>
+                      </div>
+                  </li>
+
+              </ul>
+          </div>
+        <!-- news-contain end -->
+
+        <!-- btn-more start -->
+        <a href="javascript:void(0);" class="btn-more">加载更多</a>
+        <!-- btn-more end -->
+      </div>
+      <!-- content end -->
+    </div>
+    <!-- main-contain  end -->
+
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/index.js' %}"></script>
+{% endblock %}

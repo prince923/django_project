@@ -1,0 +1,247 @@
+/* ================= main start ================= */
+#main {
+    margin-top: 25px;
+    min-height: 700px;
+}
+/* ========= main-contain start ============ */
+#main .main-contain {
+    width: 800px;
+    float: left;
+}
+/* ====== banner start ======*/
+.main-contain .banner {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+}
+.main-contain .banner .pic {
+    height: 100%;
+}
+.main-contain .banner .pic li {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    display: none;
+}
+.banner .pic li a {
+    height: 100%;
+    display: block;
+}
+.pic li a img {
+    width: 100%;
+    height: 100%;
+}
+.banner .btn {
+    display: none;
+    color: #fff;
+    z-index: 1;
+    align-self: center;
+    position: absolute;
+    transition: all 0.4s linear;
+}
+.banner .btn .py-arrow-left, .banner .btn .py-arrow-right {
+    font-size: 50px;
+    font-weight: 600;
+}
+.banner .prev {
+    left: 25px;
+}
+.banner .next {
+    right: 25px;
+}
+.banner:hover .btn {
+    display: block;
+    transition: all 0.5s  linear;
+}
+.banner .tab {
+    width: 98px;
+    height: 12px;
+    position: absolute;
+    left: 50%;
+    bottom: 22px;
+    margin-left: -49px;
+    display: flex;
+}
+.banner .tab li{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid #fff;
+    margin: 0 6px;
+}
+.banner .tab li.active {
+    background: #fff;
+}
+/* ====== banner end ======*/
+/* ====== content start ======*/
+/* == recommendNews start  == */
+#main .content .recommend-news {
+    background: #fff;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+.content .recommend-news li {
+    width: 250px;
+    height: 179px;
+    position: relative;
+}
+.recommend-news li .recommend-thumbnail {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.recommend-news li .recommend-thumbnail img {
+    width: 100%;
+    transition: all 300ms ease-out;
+}
+.recommend-news li .info {
+    height: 58px;
+    width: 100%;
+    line-height: 26px;
+    color: #fff;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+.content .recommend-news li:hover img{
+    transform: scale(1.2);
+    transition: all 300ms ease-in;
+}
+.content .recommend-news li:hover .info {
+    background: rgba(0, 0, 0, 0.6);
+}
+/* == recommendNews end  == */
+/* == news-nav start == */
+.content .news-nav {
+    padding-left: 20px;
+    background: #fff;
+    color: #878787;
+    border-top:1px solid #ddd;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.content .news-nav ul {
+    padding: 10px 0;
+}
+.news-nav ul li{
+    float: left;
+    margin-top: 10px;
+    margin-right: 20px;
+    line-height: 24px;
+    padding:0 10px;
+    border-left: 4px solid transparent;
+}
+.news-nav ul li:first-child {
+    border-left-color: blue;
+}
+.news-nav ul li.active {
+    color: #212121;
+}
+.news-nav ul li:hover {
+    text-shadow: 1px 1px 2px #212121;
+}
+/* == news-nav end == */
+/* == news-contain start == */
+.content .news-contain {
+    background: #fff;
+}
+.content .news-contain .news-list li{
+    border-bottom: 1px solid #ededed;
+}
+.news-contain .news-list .news-item{
+    display: flex;
+    align-items: flex-start;
+    padding: 20px;
+    border-bottom: 1px solid #c1c1c1;
+}
+.news-list .news-item .news-thumbnail {
+    width: 225px;
+    height: 160px;
+    margin-right: 20px;
+    overflow: hidden;
+}
+.news-item .news-thumbnail img {
+    width: 100%;
+    height: 100%;
+    transition: all 0.3s ease-out;
+}
+.news-item .news-thumbnail:hover img {
+    transform: scale(1.1);
+    transition: all 0.3s ease-in;
+}
+.news-list .news-item .news-content {
+    flex: 1;
+    color: #878787;
+    font-size: 14px;
+}
+.news-item .news-content .news-title{
+    color: #212121;
+    font-size: 22px;
+    height: 52px;
+    line-height: 26px;
+    transition:all 0.3s ease-out;
+}
+.news-item .news-content .news-title:hover {
+    color: #5b86db;
+    transition:all 0.3s ease-in;
+}
+.news-item .news-content .news-details {
+    height: 44px;
+    line-height: 22px;
+    margin-top: 19px;
+    text-align: justify;
+}
+.news-item .news-content .news-other {
+    margin-top: 30px;
+}
+.news-content .news-other .news-type {
+    color: #5b86db;
+}
+.news-content .news-other .news-author {
+    float: right;
+    margin-right: 15px;
+}
+.news-content .news-other .news-time {
+    float: right;
+}
+/* == news-contain end == */
+/* == loading-img start == */
+.news-contain .loading-img {
+    height: 66px;
+    background: url("http://onj3s3zfw.bkt.clouddn.com//o_1ckpo3tv1r1h1f951smb11r0s477.gif") center/3%  no-repeat;
+}
+/* == loading-img end == */
+/* == loading-end start == */
+.news-contain .loading-end {
+    background: #e8dede;
+    line-height: 2.5;
+    text-align: center;
+    font-size: 18px;
+    color: #2d8f6f;
+}
+/* == loading-end end == */
+/* == btn-more start == */
+.content .btn-more {
+    display: block;
+    border: none;
+    width: 400px;
+    line-height: 40px;
+    text-align: center;
+    background: skyblue;
+    color: #efefef;
+    margin: 20px auto;
+}
+.content .btn-more:hover {
+    background: #54b9e2;
+}
+/* == btn-more end == */
+/* == news-contain end == */
+/* ====== content end ======*/
+/* ========= main-contain end ============ */
+/* ================= main end ================= */

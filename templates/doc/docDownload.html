@@ -1,0 +1,65 @@
+{% extends 'base/base_side.html' %}
+
+
+{% block link %}
+    <link rel="stylesheet" href="{% static 'css/doc/docDownload.css' %}">
+{% endblock %}
+
+{% block title %}
+docDownload
+{% endblock %}
+
+{% block content %}
+      <!-- main-contain start  -->
+        <div class="main-contain ">
+            <div class="banner">
+                <img src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=1802845035,3786939119&fm=26&gp=0.jpg"
+                     alt="">
+            </div>
+            <div class="pay-doc-contain">
+                <ul class="pay-list">
+
+                    <li class="pay-item">
+                        <div class="pay-img doc"></div>
+                        <div class="d-contain">
+                            <p class="doc-title">python cookbook 3.0 教程</p>
+                            <p class="doc-desc">强烈推荐的python 教程。</p>
+
+                            <!-- /www/?xxx -->
+                            <a href="#" class="pay-price">下载</a>
+                        </div>
+                    </li>
+
+                    <li class="pay-item">
+                        <div class="pay-img doc"></div>
+                        <div class="pay-contain">
+                            <p class="pay-title">流畅的Python</p>
+                            <p class="pay-desc">【本书特色】
+                                本书由奋战在Python开发一线近20年的Luciano Ramalho执笔，Victor Stinner、Alex
+                                Martelli等Python大咖担纲技术审稿人，从语言设计层面剖析编程细节，兼顾Python 3和Python
+                                2，告诉你Python中不亲自动手实践就无法理解的语言陷阱成因和解决之道，教你写出风格地道的Python代码。</p>
+                            <!-- /www/?xxx -->
+                            <a href="#" class="pay-price">下载</a>
+                        </div>
+                    </li>
+
+                    <li class="pay-item">
+                        <div class="pay-img doc"></div>
+                        <div class="pay-contain">
+                            <p class="pay-title">深入Flask</p>
+                            <p class="pay-desc">深入Flask，强烈推荐！</p>
+
+                            <!-- /www/?xxx -->
+                            <a href="#" class="pay-price">下载</a>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!-- main-contain  end -->
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

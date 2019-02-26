@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title%}
+
+  {% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/base/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base/side.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base/common.css'%}">
+  <link rel="stylesheet" href="http://at.alicdn.com/t/font_684044_un7umbuwwfp.css">
+{% block link %}
+
+{% endblock %}
+</head>
+<body>
+<!-- header start -->
+<header id="header">
+  <div class="mw1200 header-contain clearfix">
+    <!-- logo start -->
+    <h1 class="logo">
+      <a href="javascript:void(0);" class="logo-title">Python</a>
+    </h1>
+    <!-- logo end -->
+    <!-- nav start -->
+    <nav class="nav">
+      <ul class="menu">
+        <li class="active"><a href="{% url 'news:index' %}">首页</a></li>
+        <li><a href="{% url 'course:course' %}">在线课堂</a></li>
+        <li><a href="{% url 'doc:doc_download' %}">下载文档</a></li>
+        <li><a href="{% url 'news:news_search' %}">搜索</a></li>
+      </ul>
+    </nav>
+    <!-- nav end -->
+    <!-- login start -->
+    <div class="login-box">
+      <div>
+        <i class="PyWhich py-user"></i>
+        <span>
+                        <a href="{% url 'user:login' %}" class="login">登录</a> / <a href="{% url 'user:register' %}" class="reg">注册</a>
+                      </span>
+      </div>
+      <div class="author hide">
+        <i class="PyWhich py-user"></i>
+        <span>qwertyui</span>
+        <ul class="author-menu">
+          <li><a href="javascript:void(0);">后台管理</a></li>
+          <li><a href="javascript:void(0);">退出登录</a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- login end -->
+  </div>
+</header>
+<!-- header end -->
+
+<!-- main start -->
+<main id="main">
+  <div class="w1200 clearfix">
+
+{% block content %}
+
+{% endblock %}
+ <!-- side start -->
+      <aside class="side">
+          <div class="side-activities">
+              <h3 class="activities-title">在线课堂<a href="javascript:void(0)">更多</a></h3>
+              <div class="activities-img">
+                  <a href="javascript:void(0);" target="_blank">
+                      <img src="{% static '/images/english.jpg' %}" alt="title">
+                  </a>
+                  <p class="activities-tips">对话国外小姐姐</p>
+              </div>
+              <ul class="activities-list">
+                  <li>
+                      <a href="javascript:void(0);" target="_blank">
+                          <span class="active-status active-start">报名中</span>
+                          <span class="active-title"><a
+                                  href="https://www.shiguangkey.com/course/2432"> Django 项目班</a></span>
+                      </a>
+                  </li>
+                  <li>
+                      <a href="javascript:void(0);" target="_blank">
+                          <span class="active-status active-end">已结束</span>
+                          <span class="active-title"><a
+                                  href="https://www.shiguangkey.com/course/2321">Python入门基础班</a></span>
+                      </a>
+                  </li>
+              </ul>
+          </div>
+          <div class="side-attention clearfix">
+              <h3 class="attention-title">关注我</h3>
+              <ul class="side-attention-address">
+                  <li>
+                      <a href="javascript:void(0);" target="_blank"><i class="PyWhich py-GitHub"></i>Youkou</a>
+                  </li>
+                  <li>
+                      <a href="javascript:void(0);" target="_blank"><i class="PyWhich py-zhihu"
+                                                                       style="color:rgb(0, 108, 226);"></i>Youkou</a>
+                  </li>
+                  <li>
+                      <a href="javascript:void(0);" target="_blank"><i class="PyWhich py-weibo"
+                                                                       style="color:rgb(245,92,110);"></i>Youkou</a>
+                  </li>
+              </ul>
+              <div class="side-attention-qr">
+                  <p>扫码关注</p>
+              </div>
+          </div>
+
+          <div class="side-hot-recommend">
+              <h3 class="hot-recommend">热门推荐</h3>
+              <ul class="hot-news-list">
+
+                  <li>
+                      <a href="javascript:void(0)" class="hot-news-contain clearfix">
+                          <div class="hot-news-thumbnail">
+                              <img src="{% static 'images/python_web.jpg' %}"
+                                   alt="">
+                          </div>
+                          <div class="hot-news-content">
+                              <p class="hot-news-title">Django调试工具django-debug-toolbar安装使用教程</p>
+                              <div class="hot-news-other clearfix">
+                                  <span class="news-type">python框架</span>
+                                  <!-- 自带的 -->
+                                  <time class="news-pub-time">11月11日</time>
+                                  <span class="news-author">python</span>
+                              </div>
+                          </div>
+                      </a>
+                  </li>
+
+              </ul>
+          </div>
+
+
+      </aside>
+    <!-- side end -->
+  </div>
+
+
+</main>
+<!-- main end -->
+
+
+
+<!-- footer start -->
+<footer id="footer">
+  <div class="footer-box">
+    <div class="footer-content">
+      <p class="top-content">
+					<span class="link">
+						<a href="javascript:void(0)">关于Python</a> |
+						<a href="javascript:void(0)">我就是我</a> |
+						<a href="javascript:void(0)">人生苦短</a> |
+						<a href="javascript:void(0)">我用Python</a>
+					</span>
+        <span class="about-me">关于我: <i class="PyWhich py-wechat"></i> Youkou</span>
+      </p>
+      <p class="bottom-content">
+        <span>地址： xxxx</span>
+        <span>联系方式: <a href="tel:400-1567-315">400-1567-315</a> (24小时在线)</span>
+      </p>
+    </div>
+    <p class="copyright-desc">
+      Copyright &copy; 2008 - 2018 xxx有限公司. All Rights Reserved
+    </p>
+  </div>
+</footer>
+<!-- footer end -->
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+<script src="{% static 'js/base/common.js' %}"></script>
+
+{% block script %}
+
+{% endblock %}
+</body>
+</html>

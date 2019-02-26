@@ -1,0 +1,127 @@
+{% extends 'base/base_side.html' %}
+
+
+{% block link %}
+    <link rel="stylesheet" href="{% static 'css/news/search.css' %}">
+{% endblock %}
+
+{% block title %}
+search
+{% endblock %}
+
+{% block content %}
+   <!-- main-contain start  -->
+               <div class="main-contain ">
+                   <!-- search-box start -->
+                   <div class="search-box">
+                       <form action="" style="display: inline-flex;">
+
+                           <input type="search" placeholder="请输入要搜索的内容" name="q" class="search-control">
+
+
+                           <input type="submit" value="搜索" class="search-btn">
+                       </form>
+                       <!-- 可以用浮动 垂直对齐 以及 flex  -->
+                   </div>
+                   <!-- search-box end -->
+                   <!-- content start -->
+                   <div class="content">
+                       <!-- search-list start -->
+
+
+                       <!-- search-list end -->
+                       <!-- news-contain start -->
+
+                       <div class="news-contain">
+                           <div class="hot-recommend-list">
+                               <h2 class="hot-recommend-title">热门推荐</h2>
+                               <ul class="news-list">
+
+                                   <li class="news-item clearfix">
+                                       <a href="#" class="news-thumbnail">
+                                           <img src="{% static 'images/python_gui.jpg' %}">
+                                       </a>
+                                       <div class="news-content">
+                                           <h4 class="news-title">
+                                               <a href="#">Python GUI 教程 25行代码写一个小闹钟</a>
+                                           </h4>
+                                           <p class="news-details">
+                                           </p>
+                                           <div class="news-other">
+                                               <span class="news-type">PythonGUI</span>
+                                               <span class="news-time">11/11 18:22</span>
+                                               <span class="news-author">python</span>
+                                           </div>
+                                       </div>
+                                   </li>
+
+                                   <li class="news-item clearfix">
+                                       <a href="#" class="news-thumbnail">
+                                           <img src="{% static 'images/python_advanced.jpg' %}">
+                                       </a>
+                                       <div class="news-content">
+                                           <h4 class="news-title">
+                                               <a href="#">python高性能编程方法一</a>
+                                           </h4>
+                                           <p class="news-details">
+                                           </p>
+                                           <div class="news-other">
+                                               <span class="news-type">Python高级</span>
+                                               <span class="news-time">11/11 17:13</span>
+                                               <span class="news-author">python</span>
+                                           </div>
+                                       </div>
+                                   </li>
+
+                                   <li class="news-item clearfix">
+                                       <a href="#" class="news-thumbnail">
+                                           <img src="{% static 'images/jichujiaochen.jpeg' %}">
+                                       </a>
+                                       <div class="news-content">
+                                           <h4 class="news-title">
+                                               <a href="#">python基础 split 和 join函数比较</a>
+                                           </h4>
+                                           <p class="news-details">
+                                           </p>
+                                           <div class="news-other">
+                                               <span class="news-type">Python基础</span>
+                                               <span class="news-time">11/11 16:09</span>
+                                               <span class="news-author">python</span>
+                                           </div>
+                                       </div>
+                                   </li>
+
+                                   <li class="news-item clearfix">
+                                       <a href="#" class="news-thumbnail">
+                                           <img src="{% static 'images/python_web.jpg' %}">
+                                       </a>
+                                       <div class="news-content">
+                                           <h4 class="news-title">
+                                               <a href="#">Django调试工具django-debug-toolbar安装使用教程</a>
+                                           </h4>
+                                           <p class="news-details">
+                                           </p>
+                                           <div class="news-other">
+                                               <span class="news-type">python框架</span>
+                                               <span class="news-time">11/11 15:28</span>
+                                               <span class="news-author">python</span>
+                                           </div>
+                                       </div>
+                                   </li>
+
+                               </ul>
+                           </div>
+                       </div>
+
+
+                       <!-- news-contain end -->
+                   </div>
+                   <!-- content end -->
+               </div>
+               <!-- main-contain  end -->
+{% endblock %}
+
+
+{% block script %}
+
+{% endblock %}

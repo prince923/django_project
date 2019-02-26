@@ -1,0 +1,49 @@
+{% extends 'base/base.html' %}
+
+
+{% block link %}
+    <link rel="stylesheet" href="{% static 'css/course/course.css' %}">
+{% endblock %}
+
+{% block title %}
+course
+{% endblock %}
+
+{% block content %}
+
+<main id="course-container">
+        <div class="w1200">
+            <ul class="course-list">
+
+                <li class="course-item">
+                    <a href="https://www.shiguangkey.com/course/2432">
+                        <img class="course-img" src="{% static 'images/python_advanced.jpg' %}"
+                            alt="潭州英语">
+                        <div class="course-content">
+                            <p class="course-info">python 全栈开发</p>
+                            <p class="course-author">不动(python金牌讲师)</p>
+                            <p class="course-price free">免费</p>
+                        </div>
+                    </a>
+                </li>
+
+                <li class="course-item">
+                    <a href="https://www.shiguangkey.com/course/2432">
+                        <img class="course-img" src="{% static 'images/python_web.jpg' %}"
+                            alt="潭州英语">
+                        <div class="course-content">
+                            <p class="course-info">django 项目</p>
+                            <p class="course-author">Youkou(python讲师)</p>
+                            <p class="course-price free">免费</p>
+                        </div>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </main>
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

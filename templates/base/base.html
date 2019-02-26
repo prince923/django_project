@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{% block title%}
+      
+  {% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/base/reset.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base/common.css'%}">
+  <link rel="stylesheet" href="http://at.alicdn.com/t/font_684044_un7umbuwwfp.css">
+{% block link %}
+
+{% endblock %}
+</head>
+<body>
+<!-- header start -->
+<header id="header">
+  <div class="mw1200 header-contain clearfix">
+    <!-- logo start -->
+    <h1 class="logo">
+      <a href="javascript:void(0);" class="logo-title">Python</a>
+    </h1>
+    <!-- logo end -->
+    <!-- nav start -->
+    <nav class="nav">
+      <ul class="menu">
+       <li class="active"><a href="{% url 'news:index' %}l">首页</a></li>
+        <li><a href="{% url 'course:course' %}">在线课堂</a></li>
+        <li><a href="{% url 'doc:doc_download' %}">下载文档</a></li>
+        <li><a href="{% url 'news:news_search' %}">搜索</a></li>
+      </ul>
+    </nav>
+    <!-- nav end -->
+    <!-- login start -->
+    <div class="login-box">
+      <div>
+        <i class="PyWhich py-user"></i>
+        <span>
+                        <a href="{% url 'user:login' %}" class="login">登录</a> / <a href="{% url 'user:register' %}" class="reg">注册</a>
+                      </span>
+      </div>
+      <div class="author hide">
+        <i class="PyWhich py-user"></i>
+        <span>qwertyui</span>
+        <ul class="author-menu">
+          <li><a href="javascript:void(0);">后台管理</a></li>
+          <li><a href="javascript:void(0);">退出登录</a></li>
+        </ul>
+      </div>
+    </div>
+    <!-- login end -->
+  </div>
+</header>
+<!-- header end -->
+
+<!-- container start -->
+{% block content %}
+
+{% endblock %}
+<!-- container end -->
+
+<!-- footer start -->
+<footer id="footer">
+  <div class="footer-box">
+    <div class="footer-content">
+      <p class="top-content">
+					<span class="link">
+						<a href="javascript:void(0)">关于Python</a> |
+						<a href="javascript:void(0)">我就是我</a> |
+						<a href="javascript:void(0)">人生苦短</a> |
+						<a href="javascript:void(0)">我用Python</a>
+					</span>
+        <span class="about-me">关于我: <i class="PyWhich py-wechat"></i> Youkou</span>
+      </p>
+      <p class="bottom-content">
+        <span>地址： xxxx</span>
+        <span>联系方式: <a href="tel:400-1567-315">400-1567-315</a> (24小时在线)</span>
+      </p>
+    </div>
+    <p class="copyright-desc">
+      Copyright &copy; 2008 - 2018 xxx有限公司. All Rights Reserved
+    </p>
+  </div>
+</footer>
+<!-- footer end -->
+</body>
+</html>

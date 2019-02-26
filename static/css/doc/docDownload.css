@@ -1,0 +1,96 @@
+/* ================= main start ================= */
+#main {
+    margin-top: 25px;
+    min-height: 700px;
+    flex: 1;
+}
+
+/* ========= main-contain start ============ */
+#main .main-contain {
+    width: 800px;
+    float: left;
+    margin-bottom: 30px;
+}
+
+/* ========= banner start =========== */
+.main-contain .banner {
+    width: 100%;
+}
+
+.main-contain .banner img {
+    max-width: 100%;
+}
+
+.main-contain .pay-doc-contain {
+    background: #fff;
+}
+
+.main-contain .pay-doc-contain .pay-list {
+    display: flex;
+    justify-content: space-between;
+    flex-flow: wrap;
+    padding: 0 20px 20px;
+}
+
+.main-contain .pay-doc-contain .pay-item {
+    width: 370px;
+    height: 150px;
+    border: 1px solid #ddd;
+    margin-top: 20px;
+    display: flex;
+}
+
+.main-contain .pay-doc-contain .pay-item:hover {
+    box-shadow: 2px 2px 2px #ccc;
+}
+
+.pay-doc-contain .pay-item .pay-img {
+    width: 100px;
+    height: 150px;
+    margin-right: 14px;
+    background: url("http://onj3s3zfw.bkt.clouddn.com//o_1ckpmva1lgpv1o1ur3p1ru21k3j7.png") center center no-repeat;
+}
+
+.pay-doc-contain .pay-item .pay-img.doc {
+    background: url("http://onj3s3zfw.bkt.clouddn.com//o_1ckpmva1lgpv1o1ur3p1ru21k3j7.png") center center no-repeat;
+}
+
+.pay-doc-contain .pay-item .pay-contain {
+    width: 250px;
+    position: relative
+}
+
+.pay-item .pay-contain .pay-title {
+    font-size: 20px;
+    line-height: 40px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.pay-item .pay-contain .pay-desc {
+    line-height: 20px;
+    color: #878787;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    font-size: 14px;
+    overflow: hidden;
+}
+
+.pay-item .pay-contain .pay-price {
+    position: absolute;
+    bottom: 5px;
+    right: 15px;
+    font-size: 18px;
+    line-height: 30px;
+    color: #f73e3e;
+}
+
+.pay-contain .pay-price span {
+    font-size: 18px;
+}
+
+/* ========= banner end =========== */
+/* ========= main-contain end ============ */
+/* ================= main end ================= */

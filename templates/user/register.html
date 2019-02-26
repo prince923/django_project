@@ -1,0 +1,50 @@
+{% extends 'base/base.html' %}
+
+
+{% block title %}
+register
+{% endblock %}
+
+{% block link %}
+ <link rel="stylesheet" href="{% static 'css/authPro/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+<main id="container">
+  <div class="register-contain">
+    <div class="top-contain">
+      <h4 class="please-register">请注册</h4>
+      <a href="{% url 'user:login' %}" class="login">立即登录 &gt;</a>
+    </div>
+    <form action="" method="post" class="form-contain">
+
+
+      <div class="form-item">
+        <input type="text" placeholder="请输入用户名" name="username" class="form-control" autocomplete="off">
+      </div>
+      <div class="form-item">
+        <input type="password" placeholder="请输入密码" name="password" class="form-control">
+      </div>
+      <div class="form-item">
+        <input type="password" placeholder="请输入确认密码" name="password_repeat" class="form-control">
+      </div>
+      <div class="form-item">
+        <input type="tel" placeholder="请输入手机号" name="telephone" class="form-control" autocomplete="off" autofocus>
+      </div>
+      <div class="form-item">
+        <input type="text" placeholder="请输入图形验证码" name="captcha_graph" class="form-captcha">
+        <a href="javascript:void(0);" class="captcha-graph-img">
+          <img src="{% static 'images/captcha.jpg' %}" alt="验证码" title="点击刷新">
+        </a>
+      </div>
+      <div class="form-item">
+        <input type="text" placeholder="请输入短信验证码" name="sms_captcha" class="form-captcha" autocomplete="off">
+        <a href="javascript:void(0);" class="sms-captcha" title="发送验证码">获取短信验证码</a>
+      </div>
+      <div class="form-item">
+        <input type="submit" value="立即注册" class="register-btn">
+      </div>
+    </form>
+  </div>
+</main>
+{% endblock %}

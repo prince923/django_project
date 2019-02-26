@@ -1,0 +1,64 @@
+{% extends 'base/base_side.html' %}
+
+{% block link %}
+    <link rel="stylesheet" href="{% static 'css/news/news-detail.css' %}">
+{% endblock %}
+
+{% block title %}
+news_detail
+{% endblock %}
+
+{% block content %}
+    <!-- news-contain start  -->
+    <div class="news-contain">
+      <h1 class="news-title">我就说我</h1>
+      <div class="news-info">
+        <div class="news-info-left">
+          <span class="news-author">作者</span>
+          <span class="news-pub-time">1小时前</span>
+          <span class="news-type">类型</span>
+        </div>
+      </div>
+      <article class="news-content">
+        文章内容
+      </article>
+      <div class="comment-contain">
+        <div class="comment-pub clearfix">
+          <div class="new-comment">
+            文章评论(<span class="comment-count">0</span>)
+          </div>
+          <div class="comment-control please-login-comment" style="display:none;">
+            <input type="text" placeholder="请登录后参加评论">
+          </div>
+          <div class="comment-control logged-comment">
+            <input type="text" placeholder="请填写评论">
+          </div>
+          <button class="comment-btn">发表评论</button>
+        </div>
+        <ul class="comment-list">
+          <li class="comment-item">
+            <div class="comment-info clearfix">
+              <img src="{% static 'images/avatar.jpeg' %}" alt="avatar" class="comment-avatar">
+              <span class="comment-user">评论人</span>
+              <span class="comment-pub-time">1小时前</span>
+            </div>
+            <div class="comment-content">这是一条评论</div>
+          </li>
+          <li class="comment-item">
+            <div class="comment-info clearfix">
+              <img src="{% static 'images/avatar.jpeg' %}" alt="avatar" class="comment-avatar">
+              <span class="comment-user">评论人</span>
+              <span class="comment-pub-time">1小时前</span>
+            </div>
+            <div class="comment-content">这是一条评论</div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+    <!-- news-contain end  -->
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

@@ -1,0 +1,152 @@
+#main {
+	flex: 1;
+}
+
+.course-contain {
+	width: 100%;
+}
+
+.course-contain .course-top-contain{
+	width: 100%;
+	background: #fff;
+	padding:0 20px;
+}
+.course-top-contain .course-title {
+	font-size: 30px;
+	line-height: 2.5;
+}
+
+.course-top-contain .course-other {
+	line-height: 3.5;
+}
+.course-other  .share-list {
+	float: left;
+}
+.share-list span {
+	 margin-right: 8px;
+}
+.share-list i {
+	color: orange;
+}
+.course-other .buy-list {
+	float: right;
+}
+
+.price {
+    color: #f76363;
+    float: right;
+    margin-right: 20px;
+    line-height: 40px;
+    font-size: 20px;
+}
+
+.buy-btn {
+	background-color: #ff8d3f;
+	border: none;
+    width: 120px;
+    text-align: center;
+    line-height: 40px;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 16px;
+    float: right;
+}
+
+
+.course-video {
+	border-top: 1px solid #ddd;
+	height: 400px;
+}
+
+.course-bottom-contain {
+	width: 100%;
+	margin-top: 30px;
+}
+
+.curse-bottom-contain {
+	margin-top: 30px;
+    width: 100%;
+}
+
+.course-detail-list {
+    width: 800px;
+    float: left;
+}
+
+.course-detail-list .course-item {
+	margin-bottom: 20px;
+    background-color: #fff;
+    padding: 20px;
+}
+
+.course-item .course-title{
+    border-left: 6px solid #5b86db;
+    padding: 0 10px;
+    color: #202020;
+    font-size: 18px;
+}
+
+.course-item .teacher-box {
+	margin-top: 20px;
+}
+
+.teacher-box  .teacher-avatar {
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    float: left;
+}
+
+.teacher-box .teacher-info {
+	float: left;
+    margin-left: 10px;
+    position: relative;
+    font-size: 16px;
+    color: #696969;
+    height: 62px;
+    width: 90%;
+}
+
+.teacher-name {
+    position: absolute;
+    left: 0;
+    top: 8px;
+}
+.teacher-identify {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+}
+
+.item-content {
+	font-size: 14px;
+    color: #888;
+    line-height: 2em;
+    margin-top: 20px;
+}
+
+.item-course-title {
+	font-size: 18px;
+    color: #202020;
+    float: left;
+    line-height: 40px;
+}
+
+.item-buy-list {
+	float: right;
+    margin-top: 0;
+}
+
+
+.course-side {
+	float: right;
+    width: 360px;
+    background-color: #fff;
+    padding: 20px;
+    padding-bottom: 0;
+    box-sizing: border-box;
+}
+.course-side  .side-title {
+	font-size: 18px;
+	line-height: 2.4;
+}
