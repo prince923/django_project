@@ -20,7 +20,7 @@ register
 
 
       <div class="form-item">
-        <input type="text" placeholder="请输入用户名" name="username" class="form-control" autocomplete="off">
+        <input type="text" placeholder="请输入用户名" name="username"  id = "username" class="form-control" autocomplete="off">
       </div>
       <div class="form-item">
         <input type="password" placeholder="请输入密码" name="password" class="form-control">
@@ -29,12 +29,12 @@ register
         <input type="password" placeholder="请输入确认密码" name="password_repeat" class="form-control">
       </div>
       <div class="form-item">
-        <input type="tel" placeholder="请输入手机号" name="telephone" class="form-control" autocomplete="off" autofocus>
+        <input type="tel" placeholder="请输入手机号" id="mobile" name="telephone" class="form-control" autocomplete="off" autofocus>
       </div>
       <div class="form-item">
         <input type="text" placeholder="请输入图形验证码" name="captcha_graph" class="form-captcha">
         <a href="javascript:void(0);" class="captcha-graph-img">
-          <img src="{% static 'images/captcha.jpg' %}" alt="验证码" title="点击刷新">
+          <img src="" alt="验证码" title="点击刷新">
         </a>
       </div>
       <div class="form-item">
@@ -47,4 +47,8 @@ register
     </form>
   </div>
 </main>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/user/register.js' %}"></script>
 {% endblock %}
