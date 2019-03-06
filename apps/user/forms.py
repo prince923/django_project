@@ -28,7 +28,7 @@ class CheckSmsForm(forms.Form):
     def clean(self):
         cleaned_data = super().clean()
         mobile = cleaned_data.get('mobile')
-        image_code_id = cleaned_data.get('image_code_id')
+        image_code_id = cleaned_data.get('image_code_id','')
         text = cleaned_data.get('text')
         #  1.  验证手机号是否已注册
         if UserModel.objects.filter(mobile=mobile):
@@ -36,11 +36,11 @@ class CheckSmsForm(forms.Form):
         # 2. 验证图片验证码是否存在,以及 是否正确
         redis_conn = get_redis_connection(alias='verify_codes')
         #  (1)   构建img_key
-        image_key = 'img_{}'.format(image_code_id.encode('utf-8'))
+        image_key = 'img_{}'.format(image_code_id)
         # (2)   取  image_code 并进行验证
         image_code_origin = redis_conn.get(image_key)
         image_code = image_code_origin.decode('utf-8') if image_code_origin else None
-        if not image_code or image_code != text:
+        if not image_code or image_code != text.upper():
             raise forms.ValidationError('图片验证码验证失败')
         # 3.   查看短信验证码是否在60s 内重复发送
         sms_flag_fmt = 'sms_flag_{}'.format(mobile).encode('utf-8')

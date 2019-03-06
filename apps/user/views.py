@@ -10,9 +10,11 @@ from .models import UserModel
 from .forms import CheckSmsForm
 
 from utils.json_fun import to_json_data
-from utils.res_code import Code,error_map
+from utils.res_code import Code, error_map
 from utils.yuntongxun.sms import CCP
+
 logger = logging.getLogger('django')  # 导入日志器
+
 
 class LoginView(View):
     def get(self, request):
@@ -49,6 +51,7 @@ class CheckMobile(View):
     """
     判断手机号是否存在
     """
+
     def get(self, request, mobile):
         data = {
             'mobile': mobile,
@@ -57,11 +60,11 @@ class CheckMobile(View):
         return to_json_data(data=data)
 
 
-class SmsCodes (View):
-    def post(self,request):
+class SmsCodes(View):
+    def post(self, request):
         json_data = request.body
         if not json_data:
-            return to_json_data(errno=Code.NODATA,errmsg=error_map[Code.NODATA])
+            return to_json_data(errno=Code.NODATA, errmsg=error_map[Code.NODATA])
         else:
             dict_data = json.loads(json_data.decode('utf8'))
         form = CheckSmsForm(dict_data)
@@ -75,24 +78,24 @@ class SmsCodes (View):
             sms_text_fmt = 'sms_{}'.format(mobile)
             sms_flag_fmt = 'sms_flag_{}'.format(mobile)
             try:
-                redis_conn.settex(sms_flag_fmt.encode('utf8'),60,1)
-                redis_conn.settex(sms_text_fmt.encode('utf8'),300,sms_code.encode('utf8'))
+                redis_conn.setex(sms_flag_fmt.encode('utf8'), 60, 1)
+                redis_conn.setex(sms_text_fmt.encode('utf8'), 300, sms_code)
             except Exception as e:
                 logger.error("redis 发生错误{}".format(e))
-                return to_json_data(errno=Code.UNKOWNERR,errmsg=error_map[Code.UNKOWNERR])
+                return to_json_data(errno=Code.UNKOWNERR, errmsg=error_map[Code.UNKOWNERR])
             logger.info("短信验证码为{}".format(sms_code))
             try:
-                ccp = CCP()
-                result = ccp.send_template_sms(mobile, [sms_code, 5], "1")
+                result = CCP().send_template_sms(mobile,[sms_code,5],'1')
             except Exception as e:
-                return to_json_data(errno=Code.SMSFAIL,errmsg=error_map[Code.SMSFAIL])
+                logger.error("手机短信验证码发送错误 {}".format(e))
+                return to_json_data(errno=Code.SMSFAIL, errmsg=error_map[Code.SMSFAIL])
             else:
-                if request == 0:
+                if result == 0:
                     logger.info("手机号{}短信验证码{}发送成功".format(mobile, sms_code))
                     return to_json_data(errmsg="发送短信验证码成功")
                 else:
-                    logger.error("手机号{}短信验证码{}发送异常".format(mobile,sms_code))
-                    return to_json_data(errno=Code.SMSERROR,errmsg=error_map[Code.SMSERROR])
+                    logger.error("手机号{}短信验证码{}发送异常".format(mobile, sms_code))
+                    return to_json_data(errno=Code.SMSERROR, errmsg=error_map[Code.SMSERROR])
         else:
             # 定义一个错误信息列表
             err_msg_list = []
@@ -102,5 +105,3 @@ class SmsCodes (View):
             err_msg_str = '/'.join(err_msg_list)  # 拼接错误信息为一个字符串
 
             return to_json_data(errno=Code.PARAMERR, errmsg=err_msg_str)
-
-
