@@ -33,8 +33,13 @@ $(function () {
     //   用户名验证
     let $usernameinput = $("#username");
     $usernameinput.blur(function () {
+        checkusername()
+    });
+
+    // 判断用户名是否存在
+    function checkusername() {
         let username = $usernameinput.val();
-        let sReturnValue = "";
+        let result = "";
 
         if (username === "") {
             message.showError('用户名不能为空！');
@@ -54,16 +59,21 @@ $(function () {
             .done(function (res) {
                 if (res.data.count == 0) {
                     message.showSuccess("此用户名可以正常使用")
+                    result = "success"
                 } else {
                     message.showError("此用户名已被注册")
+                    result = ""
                 }
             })
 
             .fail(function (res) {
                 message.showError("服务器超时请重试!")
+                result = ""
             });
+        return result
 
-    });
+    }
+
     // 判断手机号是否存在
     let $mobileinput = $("#mobile");
     $mobileinput.blur(
@@ -96,7 +106,7 @@ $(function () {
                     message.showError("此手机号码已被注册");
                     result = ""
                 } else {
-                    message.showSuccess("此手机号可以使用");
+                    // message.showSuccess("此手机号可以使用");
                     result = "success"
 
                 }
@@ -144,21 +154,21 @@ $(function () {
             async: false,
         })
             .done(function (res) {
-                if(res.errno === "0"){
+                if (res.errno === "0") {
                     message.showSuccess("短信验证码发送成功");
                     // 设置计数器
                     let num = 60;
                     let t = setInterval(function () {
-                        if( num === 1 ){
+                        if (num === 1) {
                             clearInterval(t);
                             $SmsBtn.html('获取短信验证码')
                         }
                         else {
-                            num  -= 1;
-                            $SmsBtn.html(num+"秒")
+                            num -= 1;
+                            $SmsBtn.html(num + "秒")
                         }
-                    },1000)
-                }else {
+                    }, 1000)
+                } else {
                     message.showError(res.errmsg)
                 }
 
@@ -170,4 +180,84 @@ $(function () {
 
     })
 
+
+    // 最终注册
+    // 注意这里获取的不是注册按钮的元素，而是form表单的元素
+    let $registerform = $(".form-contain");
+    $registerform.submit(function (e) {
+        //  关闭form表单默认的提交事件
+        e.preventDefault();
+        let $username = $("input[name=username]").val();
+        let $password = $("input[name=password]").val();
+        let $password_repeat = $("input[name=password_repeat]").val();
+        let $mobile = $("input[name=telephone]").val();
+        let $captcha_graph = $("input[name=captcha_graph]").val();
+        let $sms_code = $("input[name=sms_captcha]").val();
+        // console.log($username,$password,$password_repeat,$mobile,$captcha_graph,$sms_captcha)
+
+        // 验证用户名是否符合要求
+        if (checkusername() !== "success") {
+            return
+        }
+
+        // 验证手机号是否符合要求
+        if (checkmobile() !== "success") {
+            return
+        }
+        // 判断两次密码的长度是否符合要求
+        if (($password.length < 6 || $password.length > 20 ||
+                $password_repeat.length < 6 || $password_repeat.length > 20)) {
+            message.showError("密码长度以及重复密码长度为6-20");
+            return
+        }
+        // 判断两次密码是否相等
+        if ($password !== $password_repeat) {
+            message.showError("两次密码不相等");
+            return
+        }
+
+        // 判断用户输入的短信验证码是否为6位数字
+        if (!(/^\d{6}$/).test($sms_code)) {
+            message.showError('短信验证码格式不正确，必须为6位数字！');
+            return
+        }
+
+        //   发起注册请求
+        let  data = {
+            "username":$username,
+            "password":$password,
+            "password_repeat":$password_repeat,
+            "mobile":$mobile,
+            "sms_code":$sms_code
+        };
+        console.log(data);
+        $.ajax({
+            url: '/user/register/',
+            type: "POST",
+            data: JSON.stringify(data),
+      // 请求内容的数据类型（前端发给后端的格式）
+            contentType: "application/json; charset=utf-8",
+      // 响应数据的格式（后端返回给前端的格式）
+            dataType: "json",
+        })
+
+            .done(function (res) {
+                if(res.errno == "0"){
+                    message.showSuccess(res.errmsg);
+                    setTimeout(function () {
+                    // 注册成功之后重定向到主页
+                window.location.href = document.referrer;
+          }, 1000)
+                }else {
+                    message.showError(res.errmsg)
+                }
+            })
+
+            .fail(function (res) {
+                message.showError("服务器超时请重试!")
+            })
+
+
+
+    })
 });

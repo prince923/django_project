@@ -1,3 +1,4 @@
 my.cnf
 *.log
 settings.py
+*.pyc

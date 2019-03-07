@@ -1,3 +1,4 @@
+from django.contrib.auth import login
 from django.shortcuts import render
 from django.views import View
 import json
@@ -8,6 +9,7 @@ import logging
 from .models import UserModel
 # Create your views here.
 from .forms import CheckSmsForm
+from .forms import RegisterForm
 
 from utils.json_fun import to_json_data
 from utils.res_code import Code, error_map
@@ -29,7 +31,27 @@ class RegisterView(View):
         return render(request, 'user/register.html')
 
     def post(self, request):
-        pass
+        json_data = request.body
+        if not json_data:
+            return to_json_data(errno=Code.NODATA, errmsg=error_map[Code.NODATA])
+        else:
+            dict_data = json.loads(json_data.decode('utf8'))
+        form = RegisterForm(dict_data)
+        if form.is_valid():
+            mobile = form.cleaned_data.get('mobile')
+            password = form.cleaned_data.get('password')
+            username = form.cleaned_data.get('username')
+            user = UserModel.objects.create_user(username=username, password=password, mobile=mobile)
+            login(request, user)
+            return to_json_data(errmsg="恭喜您，注册成功")
+        else:
+            # 定义一个错误信息列表
+            err_msg_list = []
+            for item in form.errors.get_json_data().values():
+                err_msg_list.append(item[0].get('message'))
+                # print(item[0].get('message'))   # for test
+            err_msg_str = '/'.join(err_msg_list)  # 拼接错误信息为一个字符串
+            return to_json_data(errno=Code.PARAMERR, errmsg=err_msg_str)
 
 
 class CheckUsername(View):
@@ -84,18 +106,19 @@ class SmsCodes(View):
                 logger.error("redis 发生错误{}".format(e))
                 return to_json_data(errno=Code.UNKOWNERR, errmsg=error_map[Code.UNKOWNERR])
             logger.info("短信验证码为{}".format(sms_code))
-            try:
-                result = CCP().send_template_sms(mobile,[sms_code,5],'1')
-            except Exception as e:
-                logger.error("手机短信验证码发送错误 {}".format(e))
-                return to_json_data(errno=Code.SMSFAIL, errmsg=error_map[Code.SMSFAIL])
-            else:
-                if result == 0:
-                    logger.info("手机号{}短信验证码{}发送成功".format(mobile, sms_code))
-                    return to_json_data(errmsg="发送短信验证码成功")
-                else:
-                    logger.error("手机号{}短信验证码{}发送异常".format(mobile, sms_code))
-                    return to_json_data(errno=Code.SMSERROR, errmsg=error_map[Code.SMSERROR])
+            # try:
+            #     result = CCP().send_template_sms(mobile,[sms_code,5],'1')
+            # except Exception as e:
+            #     logger.error("手机短信验证码发送错误 {}".format(e))
+            #     return to_json_data(errno=Code.SMSFAIL, errmsg=error_map[Code.SMSFAIL])
+            # else:
+            #     if result == 0:
+            #         logger.info("手机号{}短信验证码{}发送成功".format(mobile, sms_code))
+            #         return to_json_data(errmsg="发送短信验证码成功")
+            #     else:
+            #         logger.error("手机号{}短信验证码{}发送异常".format(mobile, sms_code))
+            #         return to_json_data(errno=Code.SMSERROR, errmsg=error_map[Code.SMSERROR])
+            return to_json_data(errmsg="发送短信验证码成功")
         else:
             # 定义一个错误信息列表
             err_msg_list = []
