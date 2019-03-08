@@ -7,10 +7,9 @@ import string
 import django_redis
 import logging
 from .models import UserModel
-# Create your views here.
 from .forms import CheckSmsForm
 from .forms import RegisterForm
-
+from verification import constant
 from utils.json_fun import to_json_data
 from utils.res_code import Code, error_map
 from utils.yuntongxun.sms import CCP
@@ -97,11 +96,13 @@ class SmsCodes(View):
             sms_code = ''.join([random.choice(string.digits) for _ in range(6)])
             #  保存到redis数据库
             redis_conn = django_redis.get_redis_connection(alias='verify_codes')
+            #  短信验证码的key
             sms_text_fmt = 'sms_{}'.format(mobile)
+            #  短信验证码的标识位
             sms_flag_fmt = 'sms_flag_{}'.format(mobile)
             try:
-                redis_conn.setex(sms_flag_fmt.encode('utf8'), 60, 1)
-                redis_conn.setex(sms_text_fmt.encode('utf8'), 300, sms_code)
+                redis_conn.setex(sms_flag_fmt.encode('utf8'), constant.SMS_FLAG_EXISTS, 1)
+                redis_conn.setex(sms_text_fmt.encode('utf8'), constant.SMS_TEXT_EXISTS, sms_code)
             except Exception as e:
                 logger.error("redis 发生错误{}".format(e))
                 return to_json_data(errno=Code.UNKOWNERR, errmsg=error_map[Code.UNKOWNERR])

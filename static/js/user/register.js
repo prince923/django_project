@@ -58,7 +58,7 @@ $(function () {
         })
             .done(function (res) {
                 if (res.data.count == 0) {
-                    message.showSuccess("此用户名可以正常使用")
+                    //message.showSuccess("此用户名可以正常使用")
                     result = "success"
                 } else {
                     message.showError("此用户名已被注册")
@@ -106,7 +106,7 @@ $(function () {
                     message.showError("此手机号码已被注册");
                     result = ""
                 } else {
-                    // message.showSuccess("此手机号可以使用");
+                   // message.showSuccess("此手机号可以使用");
                     result = "success"
 
                 }
