@@ -33,20 +33,23 @@
     <!-- nav end -->
     <!-- login start -->
     <div class="login-box">
-      <div>
+        {% if user.is_authenticated %}
+        <div class="author">
+        <i class="PyWhich py-user"></i>
+        <span>{{ user }}</span>
+        <ul class="author-menu">
+          <li><a href="javascript:void(0);">后台管理</a></li>
+          <li><a href="{% url 'user:logout' %}">退出登录</a></li>
+        </ul>
+        </div>
+        {% else %}
+            <div>
         <i class="PyWhich py-user"></i>
         <span>
                         <a href="{% url 'user:login' %}" class="login">登录</a> / <a href="{% url 'user:register' %}" class="reg">注册</a>
                       </span>
       </div>
-      <div class="author hide">
-        <i class="PyWhich py-user"></i>
-        <span>qwertyui</span>
-        <ul class="author-menu">
-          <li><a href="javascript:void(0);">后台管理</a></li>
-          <li><a href="javascript:void(0);">退出登录</a></li>
-        </ul>
-      </div>
+        {% endif %}
     </div>
     <!-- login end -->
   </div>
@@ -87,6 +90,7 @@
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
 <script src="{% static 'js/base/common.js' %}"></script>
 <script src="{% static "js/base/message.js" %}"></script>
+<script src="{% static 'js/base/set_csrf.js' %}"></script>
 
 {% block script %}
 

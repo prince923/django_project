@@ -1,5 +1,9 @@
+import re
+
 from django import forms
+from django.contrib.auth import login
 from django.core.validators import RegexValidator
+from django.db.models import Q
 
 from .models import UserModel
 from django_redis import get_redis_connection
@@ -98,3 +102,53 @@ class RegisterForm(forms.Form):
         real_sms_code = redis_conn.get(sms_text_fmt)
         if not real_sms_code or sms_code != real_sms_code.decode('utf8'):
             raise forms.ValidationError("短信验证码输入有误")
+
+
+class LoginForm(forms.Form):
+    """
+    login form
+    :param : user_account   用户手机号或用户名
+    :param:  password   用户密码
+    :param  :  remember_me  是否记住我
+    """
+    user_account = forms.CharField()
+    password = forms.CharField(max_length=16, min_length=6,
+                               error_messages={'required': '密码不能为空', 'max_length': '密码最大长度不能超过16位',
+                                               'min_length': '密码最小长度不能低于6位'})
+    #  默认required 为True  代表传了参数
+    remember_me = forms.BooleanField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super().__init__(*args, **kwargs)
+
+    def clean_user_account(self):
+        user_account = self.cleaned_data.get('user_account')
+        if not user_account:
+            raise forms.ValidationError("用户账户信息不能为空")
+        if not re.match(r'^1[3-9]\d{9}$', user_account):
+            if not re.match(r'^\w{5,20}$', user_account):
+                raise forms.ValidationError("输入的手机号或用户名格式有误")
+            else:
+                return user_account
+        else:
+            return user_account
+
+    def clean(self):
+        clean_data = super().clean()
+        user_account = clean_data.get('user_account')
+        password = clean_data.get('password')
+        remember_me = clean_data.get('remember_me')
+        user_queryset = UserModel.objects.filter(Q(mobile=user_account) | Q(username=user_account))
+        if not user_queryset:
+            raise forms.ValidationError("该用户不存在")
+        else:
+            user = user_queryset.first()
+            if not user.check_password(password):  # django  自带的判断用户密码是否正确
+                raise forms.ValidationError('用户密码错误')
+            else:
+                login(self.request, user)
+                if remember_me:
+                    self.request.session.set_expiry(None)
+                else:
+                    self.request.session.set_expiry(0)

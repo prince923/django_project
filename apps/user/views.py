@@ -1,5 +1,5 @@
-from django.contrib.auth import login
-from django.shortcuts import render
+from django.contrib.auth import login, logout
+from django.shortcuts import render, redirect,reverse
 from django.views import View
 import json
 import random
@@ -8,7 +8,7 @@ import django_redis
 import logging
 from .models import UserModel
 from .forms import CheckSmsForm
-from .forms import RegisterForm
+from .forms import RegisterForm, LoginForm
 from verification import constant
 from utils.json_fun import to_json_data
 from utils.res_code import Code, error_map
@@ -18,11 +18,41 @@ logger = logging.getLogger('django')  # 导入日志器
 
 
 class LoginView(View):
+    """
+    login view
+    1.  获取前端传过来的json数据
+    2.  校验
+    3. 登陆
+    4. 返回json数据
+    """
+
     def get(self, request):
         return render(request, 'user/login.html')
 
     def post(self, request):
-        pass
+        json_data = request.body
+        if not json_data:
+            return to_json_data(errno=Code.NODATA, errmsg=error_map[Code.NODATA])
+        else:
+            dict_data = json.loads(json_data.decode('utf8'))
+        form = LoginForm(data=dict_data,request=request)
+        if form.is_valid():
+            return to_json_data(errno=Code.OK,errmsg='登陆成功')
+        else:
+            # 定义一个错误信息列表
+            err_msg_list = []
+            for item in form.errors.get_json_data().values():
+                err_msg_list.append(item[0].get('message'))
+                # print(item[0].get('message'))   # for test
+            err_msg_str = '/'.join(err_msg_list)  # 拼接错误信息为一个字符串
+            return to_json_data(errno=Code.PARAMERR, errmsg=err_msg_str)
+
+
+class LogoutView(View):
+    def get(self,request):
+        logout(request)
+        return redirect('/user/login/')
+
 
 
 class RegisterView(View):
