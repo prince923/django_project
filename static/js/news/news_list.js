@@ -78,14 +78,14 @@ $(function () {
                     }
                     res.data.news.forEach(function (one_news) {
                         let content = `<li class="news-item">
-                      <a href="https://www.shiguangkey.com/course/2432" class="news-thumbnail"
+                      <a href="/detail/${one_news.id}/" class="news-thumbnail"
                          target="_blank">
                           <img src="${one_news.image_url}" alt="${one_news.title}"
                                title="${one_news.title}">
                       </a>
                       <div class="news-content">
                           <h4 class="news-title"><a
-                                  href="#">${one_news.title}</a>
+                                  href="/detail/${one_news.id}/">${one_news.title}</a>
                           </h4>
                           <p class="news-details">${one_news.digest}</p>
                           <div class="news-other">

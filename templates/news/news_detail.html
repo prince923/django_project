@@ -11,16 +11,16 @@ news_detail
 {% block content %}
     <!-- news-contain start  -->
     <div class="news-contain">
-      <h1 class="news-title">我就说我</h1>
+      <h1 class="news-title">{{ news.title }}</h1>
       <div class="news-info">
         <div class="news-info-left">
-          <span class="news-author">作者</span>
-          <span class="news-pub-time">1小时前</span>
-          <span class="news-type">类型</span>
+          <span class="news-author">{{ news.author.username }}</span>
+          <span class="news-pub-time">{{ news.update_time }}</span>
+          <span class="news-type">{{ news.tag.tag_name }}</span>
         </div>
       </div>
       <article class="news-content">
-        文章内容
+        {{ news.content | safe}}
       </article>
       <div class="comment-contain">
         <div class="comment-pub clearfix">

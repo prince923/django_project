@@ -1,5 +1,7 @@
 /*=== bannerStart ===*/
+
 $(()=>{
+    load_banner();
     let $banner = $('.banner');
     let $picLi = $(".banner .pic li");
     let $prev = $('.banner .prev');
@@ -43,3 +45,42 @@ $(()=>{
     });
 });
 /*=== newsNavEnd ===*/
+
+function load_banner () {
+       $.ajax({
+        url:'/banner/',
+        type:'GET',
+        dataType:'json',
+        async: false
+    })
+         .done(function (res) {
+        if (res.errno === "0") {
+          let content = ``;
+          let tab_content = ``;
+          res.data.banners.forEach(function (one_banner, index) {
+            if (index === 0){
+              content = `
+                <li style="display:block;"><a href="/detail/${one_banner.news_id}/">
+                 <img src="${one_banner.image_url}" alt="${one_banner.news_title}"></a></li>
+              `;
+              tab_content = `<li class="active"></li>`;
+            } else {
+              content = `
+              <li><a href="/detail/${one_banner.news_id}/"><img src="${one_banner.image_url}" alt="${one_banner.news_title}"></a></li>
+              `;
+              tab_content = `<li></li>`;
+            }
+
+            $(".pic").append(content);
+            $(".tab").append(tab_content)
+          });
+
+        } else {
+          // 登录失败，打印错误信息
+          message.showError(res.errmsg);
+        }
+      })
+     .fail(function (res) {
+        window.showError('服务器连接超时请重试')
+    });
+}

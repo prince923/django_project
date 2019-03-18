@@ -20,23 +20,23 @@ index
             <ul class="pic">
                 <!--淡入淡出banner-->
 
-
-                <li><a href="javascript:void(0);"><img src="{% static 'images/linux.jpg' %}" alt="test"></a></li>
-
-
-                <li><a href="javascript:void(0);"><img src="{% static  'images/python_gui.jpg'%}" alt="test"></a></li>
-
-
-                <li><a href="javascript:void(0);"><img src="{% static 'images/python_function.jpg' %}" alt="test"></a></li>
-
-
-                <li><a href="javascript:void(0);"><img src="{% static '/images/python_advanced.jpg' %}" alt="test"></a></li>
-
-
-                <li><a href="javascript:void(0);"><img src="{% static  '/images/jichujiaochen.jpeg' %}" alt="test"></a></li>
-
-
-                <li><a href="javascript:void(0);"><img src="{% static '/images/python_web.jpg' %}" alt="test"></a></li>
+{##}
+{#                <li><a href="javascript:void(0);"><img src="{% static 'images/linux.jpg' %}" alt="test"></a></li>#}
+{##}
+{##}
+{#                <li><a href="javascript:void(0);"><img src="{% static  'images/python_gui.jpg'%}" alt="test"></a></li>#}
+{##}
+{##}
+{#                <li><a href="javascript:void(0);"><img src="{% static 'images/python_function.jpg' %}" alt="test"></a></li>#}
+{##}
+{##}
+{#                <li><a href="javascript:void(0);"><img src="{% static '/images/python_advanced.jpg' %}" alt="test"></a></li>#}
+{##}
+{##}
+{#                <li><a href="javascript:void(0);"><img src="{% static  '/images/jichujiaochen.jpeg' %}" alt="test"></a></li>#}
+{##}
+{##}
+{#                <li><a href="javascript:void(0);"><img src="{% static '/images/python_web.jpg' %}" alt="test"></a></li>#}
 
 
             </ul>
@@ -47,23 +47,23 @@ index
             <ul class="tab">
                 <!-- 按钮数量必须和图片一致 -->
 
-
-                <li></li>
-
-
-                <li></li>
-
-
-                <li></li>
-
-
-                <li></li>
-
-
-                <li></li>
-
-
-                <li></li>
+{##}
+{#                <li></li>#}
+{##}
+{##}
+{#                <li></li>#}
+{##}
+{##}
+{#                <li></li>#}
+{##}
+{##}
+{#                <li></li>#}
+{##}
+{##}
+{#                <li></li>#}
+{##}
+{##}
+{#                <li></li>#}
 
 
             </ul>
@@ -74,32 +74,20 @@ index
       <div class="content">
         <!-- recommend-news start -->
           <ul class="recommend-news">
-              <li>
-                  <a href="https://www.shiguangkey.com/course/2432" target="_blank">
+              {% for news_hot in news_hots %}
+                         <li>
+                  <a href="{%url 'news:news_detail' news_hot.news.id  %}" target="_blank">
                       <div class="recommend-thumbnail">
-                          <img src="{% static '/images/python_gui.jpg' %}" alt="title">
+                          <img src="{{ news_hot.news.image_url }}" alt="title">
                       </div>
-                      <p class="info">Python GUI 教程 25行代码写一个小闹钟</p>
+                      <p class="info">{{ news_hot.news.title }}</p>
                   </a>
               </li>
+              {% endfor %}
 
-              <li>
-                  <a href="https://www.shiguangkey.com/course/2432" target="_blank">
-                      <div class="recommend-thumbnail">
-                          <img src="{% static '/images/python_advanced.jpg' %}" alt="title">
-                      </div>
-                      <p class="info">python高性能编程方法一</p>
-                  </a>
-              </li>
 
-              <li>
-                  <a href="https://www.shiguangkey.com/course/2432" target="_blank">
-                      <div class="recommend-thumbnail">
-                          <img src="{% static '/images/jichujiaochen.jpeg' %}" alt="title">
-                      </div>
-                      <p class="info">python基础 split 和 join函数比较</p>
-                  </a>
-              </li>
+
+
           </ul>
         <!-- recommend-news end -->
 
@@ -237,4 +225,5 @@ index
 {% block script %}
 <script src="{% static 'js/index.js' %}"></script>
 <script src="{% static 'js/news/news_list.js' %}"></script>
+<script src="{% static 'js/base/message.js' %}"></script>
 {% endblock %}

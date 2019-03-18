@@ -99,7 +99,7 @@ class NewsBanner(BaseModel):
     ]
 
     image_url = models.URLField(verbose_name='轮播图图片链接', help_text='轮播图图片链接')
-    priority = models.IntegerField(verbose_name='轮播图片优先级', help_text='轮播图片优先级',default=6,choices=PRI_CHOICES)  # 优先级默认为第六级
+    priority = models.IntegerField(verbose_name='轮播图片优先级', help_text='轮播图片优先级',default=6,choices=PRI_CHOICES) # 优先级默认为第六级
     news = models.ForeignKey('NewsModel', on_delete=models.CASCADE)
 
     class Meta:
