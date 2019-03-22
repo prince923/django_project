@@ -23,7 +23,7 @@ news_detail
         {{ news.content | safe}}
       </article>
       <div class="comment-contain">
-        <div class="comment-pub clearfix">
+        <div class="comment-pub clearfix" news-id="{{ news.id }}">
           <div class="new-comment">
             文章评论(<span class="comment-count">0</span>)
           </div>
@@ -31,27 +31,40 @@ news_detail
             <input type="text" placeholder="请登录后参加评论">
           </div>
           <div class="comment-control logged-comment">
-            <input type="text" placeholder="请填写评论">
+            <input type="text" placeholder="请填写评论" class="input_comment">
           </div>
           <button class="comment-btn">发表评论</button>
         </div>
         <ul class="comment-list">
-          <li class="comment-item">
+            {% for comment in comments %}
+            <li class="comment-item">
             <div class="comment-info clearfix">
               <img src="{% static 'images/avatar.jpeg' %}" alt="avatar" class="comment-avatar">
-              <span class="comment-user">评论人</span>
-              <span class="comment-pub-time">1小时前</span>
+              <span class="comment-user">{{ comment.author.username }}</span>
+              <span class="comment-pub-time">{{ comment.update_time }}</span>
             </div>
-            <div class="comment-content">这是一条评论</div>
+            <div class="comment-content">{{ comment.content }}</div>
+                {% if comment.parents %}
+                <div class="parent_comment_text">
+                  <div class="parent_username">{{ comment.parents.author.username }}</div>
+                  <br/>
+                  <div class="parent_content_text">
+                    {{ comment.parents.content }}
+                  </div>
+                </div>
+                {% endif %}
+                 <div class="comment_time left_float">{{ one_comment.update_time }}</div>
+              <a href="javascript:void(0);" class="reply_a_tag right_float">回复</a>
+              <form class="reply_form left_float" comment-id="{{ comment.id }}" news-id="{{ comment.news_id }}">
+                <textarea class="reply_input"></textarea>
+                <input type="button" value="回复" class="reply_btn right_float">
+                <input type="reset" name="" value="取消" class="reply_cancel right_float">
+              </form>
           </li>
-          <li class="comment-item">
-            <div class="comment-info clearfix">
-              <img src="{% static 'images/avatar.jpeg' %}" alt="avatar" class="comment-avatar">
-              <span class="comment-user">评论人</span>
-              <span class="comment-pub-time">1小时前</span>
-            </div>
-            <div class="comment-content">这是一条评论</div>
-          </li>
+            {% endfor %}
+            
+          
+          
         </ul>
       </div>
 
@@ -60,5 +73,5 @@ news_detail
 {% endblock %}
 
 {% block script %}
-
+    <script src="{% static 'js/news/news_detail.js' %}"></script>
 {% endblock %}

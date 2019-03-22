@@ -4,8 +4,10 @@ from django.core.paginator import Paginator
 import logging
 from utils.json_fun import to_json_data
 from utils.res_code import Code, error_map
-from .models import TagModel, NewsModel, NewsHots, NewsBanner
+from .models import TagModel, NewsModel, NewsHots, NewsBanner, CommentModel
+from user.models import UserModel
 from . import constant
+import json
 
 logger = logging.getLogger('django')
 
@@ -81,10 +83,59 @@ class NewsDetailView(View):
         news = NewsModel.objects.select_related('tag', 'author'). \
             only('id', 'title', 'content', 'author__username', 'tag__tag_name', 'update_time'). \
             filter(is_delete=False, id=news_id).first()
+        comments = CommentModel.objects.select_related('author', 'parents'). \
+            only('content', 'author__username', 'update_time',
+                 'parents__author__username', 'parents__content', 'parents__update_time'). \
+            filter(news_id=news_id, is_delete=False)
         return render(request, 'news/news_detail.html', locals())
 
-    def post(self, request):
-        pass
+    def post(self, request, news_id):
+        json_data = request.body
+        if json_data:
+            dict_data = json.loads(json_data.decode('utf8'))
+        else:
+            return to_json_data(errno=Code.NODATA, errmsg=error_map[Code.NODATA])
+        if not request.user:
+            return to_json_data(errno=Code.SESSIONERR, errmsg=[Code.SESSIONERR])
+        news = NewsModel.objects.filter(id=news_id)
+        if news:
+            parent_id = dict_data.get('parent_id')
+            if parent_id:
+                try:
+                    int(parent_id)
+                except Exception as e:
+                    logger.error('父评论错误 {}'.format(e))
+                    return to_json_data(errno=Code.DATAERR, errmsg='父评论错误')
+            content = dict_data.get('content')
+            if content:
+                # comment=CommentModel()
+                # comment.news_id=news_id
+                # comment.content=content
+                # comment.parents_id=parent_id
+                # comment.author_id=request.user.id
+                # comment.save()
+                user = UserModel.objects.filter(username=request.user).first()
+                comment = CommentModel.objects.create(news_id=news_id, content=content, parents_id=parent_id,
+                                                      author_id=user.id)
+                comment_info = {'comment_id': comment.id,
+                                'comment_news_id': comment.news_id,
+                                'content': comment.content,
+                                'author_username': comment.author.username,
+                                'update_time': comment.update_time.strftime('%Y年%m月%d日 %H:%M')}
+                if not comment.parents:
+                    return to_json_data(data=comment_info)
+                else:
+                    parent_comment_data = {
+                        'parent_author_username': comment.parents.author.username,
+                        'parent_content': comment.parents.content,
+                    }
+                    comment_info.update(parent_comment_data)
+                return to_json_data(data=comment_info)
+            else:
+                logger.error('评论信息不能为空')
+                return to_json_data(errno=Code.NODATA, errmsg="评论信息不能为空")
+        else:
+            return to_json_data(errno=Code.NODATA, errmsg='新闻不存在')
 
 
 class NewsSearch(View):
@@ -97,7 +148,8 @@ class NewsSearch(View):
 
 class NewsBannerView(View):
     def get(self, request):
-        banners = NewsBanner.objects.select_related('news').only('image_url', 'news_id','news__title').filter(is_delete=False)[0:6]
+        banners = NewsBanner.objects.select_related('news').only('image_url', 'news_id', 'news__title').filter(
+            is_delete=False)[0:6]
         banner_list = []
         for banner in banners:
             banner_list.append({

@@ -76,7 +76,7 @@
   margin-top: 30px;
 }
 .comment-list .comment-item {
-  border-bottom: 1px solid #ddd;
+  /*border-bottom: 1px solid #ddd;*/
   margin-bottom: 30px;
 }
 .comment-item .comment-info {
@@ -101,3 +101,77 @@
 }
 /* ========= news-contain end ============ */
 /* ================= main end ================= */
+/* ========= 为父评论添加样式 start============ */
+.left_float{
+	float:left;
+}
+
+.right_float{
+	float:right;
+}
+
+.parent_comment_text{
+    width:698px;
+    padding:8px;
+    background: #f4facf;
+    margin:10px 0 0 60px;
+}
+
+.comment_time{
+    font-size:12px;
+    color:#999;
+    margin:10px 0 0 60px;
+}
+
+.parent_comment_text .parent_username{
+    font-size:12px;
+    color:#000;
+    margin-bottom:5px;
+}
+
+.parent_comment_text .parent_content_text{
+    color:#666;
+    font-size:14px;
+}
+
+.reply_a_tag{
+    font-size:12px;
+    color:#999;
+    text-indent:20px;
+    margin:10px 0 0 20px;
+    background:url('/static/images/content_icon.png') left center no-repeat;
+}
+
+.reply_form{
+    width:718px;
+    overflow:hidden;
+    margin:10px 0 0 60px;
+    display:none;
+}
+
+.reply_input{
+    float:left;
+    width:692px;
+    height:30px;
+    border-radius:4px;
+    padding:10px;
+    outline:none;
+    border:1px solid #2185ed;
+}
+
+.reply_btn,.reply_cancel{
+    width:40px;
+    height:23px;
+    background:#76b6f4;
+    border:0px;
+    border-radius:2px;
+    color:#fff;
+    margin:10px 5px 0 10px;
+    cursor:pointer;
+}
+
+.reply_cancel{
+    background:#fff;
+    color: #909090;
+}
+/* ========= 为父评论添加样式 end============ */
