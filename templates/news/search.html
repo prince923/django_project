@@ -11,7 +11,10 @@ search
 
 {% block content %}
    <!-- main-contain start  -->
-               <div class="main-contain ">
+            <!-- 在templates/news/search.html中加入如下代码： -->
+
+
+<div class="main-contain ">
                    <!-- search-box start -->
                    <div class="search-box">
                        <form action="" style="display: inline-flex;">
@@ -27,94 +30,134 @@ search
                    <!-- content start -->
                    <div class="content">
                        <!-- search-list start -->
+                        {% if not show_all %}
+                          <div class="search-result-list">
+                            <h2 class="search-result-title">
+                              搜索结果 <span style="font-weight: 700;color: #ff6620;">{{ paginator.num_pages }}</span>页
+                            </h2>
+                            <ul class="news-list">
+                              {# 导入自带高亮功能 #}
+                              {% load highlight %}
+                              {% for one_news in page.object_list %}
+                                <li class="news-item clearfix">
+                                  <a href="{% url 'news:news_detail' one_news.id %}" class="news-thumbnail" target="_blank">
+                                  <img src="{{ one_news.object.image_url }}">
+                                  </a>
+                                  <div class="news-content">
+                                    <h4 class="news-title">
+                                      <a href="{% url 'news:news_detail' one_news.id %}">
+                                        {% highlight one_news.title with query %}
+                                      </a>
+                                    </h4>
+                                    <p class="news-details">{% highlight one_news.digest with query %}</p>
+                                    <div class="news-other">
+                                      <span class="news-type">{{ one_news.object.tag.tag_name }}</span>
+                                      <span class="news-time">{{ one_news.object.update_time }}</span>
+                                      <span
+                                          class="news-author">{{ one_news.object.author.username }}
 
+                                      </span>
+                                    </div>
+                                  </div>
+                                </li>
+                              {% endfor %}
+
+
+                            </ul>
+                          </div>
+
+                        {% else %}
+
+                          <div class="news-contain">
+                            <div class="hot-recommend-list">
+                              <h2 class="hot-recommend-title">热门推荐</h2>
+                              <ul class="news-list">
+
+                                {% for one_hotnews in page.object_list %}
+
+                                  <li class="news-item clearfix">
+                                    <a href="{% url 'news:news_detail' one_hotnews.news.id %}" class="news-thumbnail">
+                                      <img src="{{ one_hotnews.news.image_url }}">
+                                    </a>
+                                    <div class="news-content">
+                                      <h4 class="news-title">
+                                        <a href="{% url 'news:news_detail' one_hotnews.news.id %}">{{ one_hotnews.news.title }}</a>
+                                      </h4>
+                                      <p class="news-details">{{ one_hotnews.news.digest }}</p>
+                                      <div class="news-other">
+                                        <span class="news-type">{{ one_hotnews.news.tag.tag_name }}</span>
+                                        <span class="news-time">{{ one_hotnews.update_time }}</span>
+                                        <span class="news-author">{{ one_hotnews.news.author.username }}</span>
+                                      </div>
+                                    </div>
+                                  </li>
+
+                                {% endfor %}
+
+
+                              </ul>
+                            </div>
+                          </div>
+
+                        {% endif %}
 
                        <!-- search-list end -->
                        <!-- news-contain start -->
 
-                       <div class="news-contain">
-                           <div class="hot-recommend-list">
-                               <h2 class="hot-recommend-title">热门推荐</h2>
-                               <ul class="news-list">
+                    {# 分页导航 #}
+                     <div class="page-box" id="pages">
+                       <div class="pagebar" id="pageBar">
+                          <a class="a1">{{ page.paginator.count }}条</a>
+                         {# 上一页的URL地址 #}
+                         {% if page.has_previous %}
+                           {% if query %}
+                             <a href="{% url 'news:search' %}?q={{ query }}&amp;page={{ page.previous_page_number }}"
+                                class="prev">上一页</a>
+                           {% else %}
+                             <a href="{% url 'news:search' %}?page={{ page.previous_page_number }}" class="prev">上一页</a>
+                           {% endif %}
+                         {% endif %}
+                         {# 列出所有的URL地址 #}
+                         {% for num in page.paginator.page_range|slice:":10" %}
+                           {% if num == page.number %}
+                             <span class="sel">{{ page.number }}</span>
+                           {% else %}
+                             {% if query %}
+                               <a href="{% url 'news:search' %}?q={{ query }}&amp;page={{ num }}"
+                                  target="_self">{{ num }}</a>
+                             {% else %}
+                               <a href="{% url 'news:search' %}?page={{ num }}" target="_self">{{ num }}</a>
+                             {% endif %}
+                           {% endif %}
+                         {% endfor %}
 
-                                   <li class="news-item clearfix">
-                                       <a href="#" class="news-thumbnail">
-                                           <img src="{% static 'images/python_gui.jpg' %}">
-                                       </a>
-                                       <div class="news-content">
-                                           <h4 class="news-title">
-                                               <a href="#">Python GUI 教程 25行代码写一个小闹钟</a>
-                                           </h4>
-                                           <p class="news-details">
-                                           </p>
-                                           <div class="news-other">
-                                               <span class="news-type">PythonGUI</span>
-                                               <span class="news-time">11/11 18:22</span>
-                                               <span class="news-author">python</span>
-                                           </div>
-                                       </div>
-                                   </li>
+                        {# 如果页数大于10，则打两点 #}
+                         {% if page.paginator.num_pages > 10 %}
+                           ..
 
-                                   <li class="news-item clearfix">
-                                       <a href="#" class="news-thumbnail">
-                                           <img src="{% static 'images/python_advanced.jpg' %}">
-                                       </a>
-                                       <div class="news-content">
-                                           <h4 class="news-title">
-                                               <a href="#">python高性能编程方法一</a>
-                                           </h4>
-                                           <p class="news-details">
-                                           </p>
-                                           <div class="news-other">
-                                               <span class="news-type">Python高级</span>
-                                               <span class="news-time">11/11 17:13</span>
-                                               <span class="news-author">python</span>
-                                           </div>
-                                       </div>
-                                   </li>
+                           {% if query %}
+                             <a href="{% url 'news:search' %}?q={{ query }}&amp;page={{ page.paginator.num_pages }}"
+                                target="_self">{{ page.paginator.num_pages }}</a>
+                           {% else %}
+                             <a href="{% url 'news:search' %}?page={{ page.paginator.num_pages }}"
+                                target="_self">{{ page.paginator.num_pages }}</a>
+                           {% endif %}
 
-                                   <li class="news-item clearfix">
-                                       <a href="#" class="news-thumbnail">
-                                           <img src="{% static 'images/jichujiaochen.jpeg' %}">
-                                       </a>
-                                       <div class="news-content">
-                                           <h4 class="news-title">
-                                               <a href="#">python基础 split 和 join函数比较</a>
-                                           </h4>
-                                           <p class="news-details">
-                                           </p>
-                                           <div class="news-other">
-                                               <span class="news-type">Python基础</span>
-                                               <span class="news-time">11/11 16:09</span>
-                                               <span class="news-author">python</span>
-                                           </div>
-                                       </div>
-                                   </li>
+                         {% endif %}
 
-                                   <li class="news-item clearfix">
-                                       <a href="#" class="news-thumbnail">
-                                           <img src="{% static 'images/python_web.jpg' %}">
-                                       </a>
-                                       <div class="news-content">
-                                           <h4 class="news-title">
-                                               <a href="#">Django调试工具django-debug-toolbar安装使用教程</a>
-                                           </h4>
-                                           <p class="news-details">
-                                           </p>
-                                           <div class="news-other">
-                                               <span class="news-type">python框架</span>
-                                               <span class="news-time">11/11 15:28</span>
-                                               <span class="news-author">python</span>
-                                           </div>
-                                       </div>
-                                   </li>
-
-                               </ul>
-                           </div>
+                         {# 下一页的URL地址 #}
+                         {% if page.has_next %}
+                           {% if query %}
+                             <a href="{% url 'news:search' %}?q={{ query }}&amp;page={{ page.next_page_number }}"
+                                class="next">下一页</a>
+                           {% else %}
+                             <a href="{% url 'news:search' %}?page={{ page.next_page_number }}" class="next">下一页</a>
+                           {% endif %}
+                         {% endif %}
                        </div>
+                     </div>
 
-
-                       <!-- news-contain end -->
+                     <!-- news-contain end -->
                    </div>
                    <!-- content end -->
                </div>

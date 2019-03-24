@@ -119,3 +119,46 @@
 }
 /* === content end === */
 /* ================= main end ================= */
+
+/* === current index start === */
+#pages {
+	padding: 32px 0 10px;
+}
+
+.page-box {
+	text-align: center;
+    /*font-size: 14px;*/
+}
+
+#pages a.prev, a.next {
+	width: 56px;
+	padding: 0
+}
+
+#pages a {
+	display: inline-block;
+	height: 26px;
+	line-height: 26px;
+	background: #fff;
+	border: 1px solid #e3e3e3;
+	text-align: center;
+	color: #333;
+	padding: 0 10px
+}
+
+#pages .sel {
+	display: inline-block;
+	height: 26px;
+	line-height: 26px;
+	background: #0093E9;
+	border: 1px solid #0093E9;
+	color: #fff;
+	text-align: center;
+	padding: 0 10px
+}
+
+.highlighted {
+    color: coral;
+    font-weight: bold;
+}
+/* === current index end === */
