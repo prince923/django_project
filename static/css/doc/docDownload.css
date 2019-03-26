@@ -1,3 +1,5 @@
+/* 在static/css/doc/docDownload.css中，把如下代码覆盖之前的样式 */
+
 /* ================= main start ================= */
 #main {
     margin-top: 25px;
@@ -33,9 +35,9 @@
 }
 
 .main-contain .pay-doc-contain .pay-item {
-    width: 370px;
-    height: 150px;
-    border: 1px solid #ddd;
+    width: 800px;
+    height: 200px;
+    border-top: 1px solid #ddd;
     margin-top: 20px;
     display: flex;
 }
@@ -45,14 +47,8 @@
 }
 
 .pay-doc-contain .pay-item .pay-img {
-    width: 100px;
-    height: 150px;
-    margin-right: 14px;
-    background: url("http://onj3s3zfw.bkt.clouddn.com//o_1ckpmva1lgpv1o1ur3p1ru21k3j7.png") center center no-repeat;
-}
-
-.pay-doc-contain .pay-item .pay-img.doc {
-    background: url("http://onj3s3zfw.bkt.clouddn.com//o_1ckpmva1lgpv1o1ur3p1ru21k3j7.png") center center no-repeat;
+    width: 120px;
+    margin-right: 30px;
 }
 
 .pay-doc-contain .pay-item .pay-contain {
@@ -78,19 +74,32 @@
     overflow: hidden;
 }
 
-.pay-item .pay-contain .pay-price {
-    position: absolute;
-    bottom: 5px;
-    right: 15px;
-    font-size: 18px;
-    line-height: 30px;
-    color: #f73e3e;
+.pay-item .pay-price {
+    display: block;
+    font-size: 20px;
+    text-align: right;
+    padding-right: 20px;
+    color: coral;
 }
 
-.pay-contain .pay-price span {
+.d-contain {
+    width: 100%;
+    margin: 20px 0 20px ;
     font-size: 18px;
+    line-height: normal;
 }
 
+.d-contain .doc-desc {
+    text-indent: 2em;
+    margin: 15px;
+    /*padding: 10px;*/
+}
+
+.d-contain .doc-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: chocolate;
+}
 /* ========= banner end =========== */
 /* ========= main-contain end ============ */
 /* ================= main end ================= */
