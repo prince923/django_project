@@ -14,30 +14,22 @@ course
 <main id="course-container">
         <div class="w1200">
             <ul class="course-list">
-
+                {% for cours in courses %}
                 <li class="course-item">
-                    <a href="https://www.shiguangkey.com/course/2432">
-                        <img class="course-img" src="{% static 'images/python_advanced.jpg' %}"
+                    <a href="{% url 'course:course_detail' cours.id %}">
+                        <img class="course-img" src="{{ cours.cover_url }}"
                             alt="潭州英语">
                         <div class="course-content">
-                            <p class="course-info">python 全栈开发</p>
-                            <p class="course-author">不动(python金牌讲师)</p>
+                            <p class="course-info">{{ cours.category.name }}</p>
+                            <p class="course-author">{{ cours.teacher.name }}</p>
                             <p class="course-price free">免费</p>
                         </div>
                     </a>
                 </li>
+                {% endfor %}
 
-                <li class="course-item">
-                    <a href="https://www.shiguangkey.com/course/2432">
-                        <img class="course-img" src="{% static 'images/python_web.jpg' %}"
-                            alt="潭州英语">
-                        <div class="course-content">
-                            <p class="course-info">django 项目</p>
-                            <p class="course-author">Youkou(python讲师)</p>
-                            <p class="course-price free">免费</p>
-                        </div>
-                    </a>
-                </li>
+
+
 
             </ul>
         </div>

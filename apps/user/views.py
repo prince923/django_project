@@ -37,6 +37,7 @@ class LoginView(View):
             dict_data = json.loads(json_data.decode('utf8'))
         form = LoginForm(data=dict_data,request=request)
         if form.is_valid():
+            logger.info('login success {}'.format(request.user))
             return to_json_data(errno=Code.OK,errmsg='登陆成功')
         else:
             # 定义一个错误信息列表

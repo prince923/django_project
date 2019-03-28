@@ -1,4 +1,4 @@
-{% extends 'base/base.html' %}
+{% extends 'base/base_side.html' %}
 
 {% block link %}
     <link rel="stylesheet" href="{% static 'css/course/course-detail.css' %}">
@@ -9,14 +9,18 @@ courseDetail
 {% endblock %}
 
 {% block content %}
+<!-- 在templates/course/course_detail.html中的main block下添加如下代码 -->
+
+<!-- main-contain start  -->
+<main id="main">
+  <div class="w1200">
     <div class="course-contain">
       <div class="course-top-contain">
-        <h4 class="course-title">课程标题</h4>
+        <h4 class="course-title">{{ course.title }}</h4>
         <div class="course-other clearfix">
           <div class="share-list">
             <span>分享至:</span>
             <i class="PyWhich py-weibo"></i>
-            <i class="PyWhich py-weibo2"></i>
           </div>
           <div class="buy-list">
             <span class="price">免费</span>
@@ -24,33 +28,37 @@ courseDetail
         </div>
       </div>
       <div class="course-video" id="course-video">
+        <span class="course-data" style="display: none;" data-video-url="{{ course.video_url }}"
+              data-cover-url="{{ course.cover_url }}">
+        </span>
       </div>
+
       <div class="course-bottom-contain">
         <div class="course-detail-list">
           <div class="course-item clearfix">
-            <h5 class="course-title">课程讲师</h5>
+            <h5 class="course-title">{{ course.teacher.name }}</h5>
             <div class="teacher-box clearfix">
-              <img src="{% static 'images/avatar.jpeg' %}" alt="Which"
-                   title="Which" class="teacher-avatar">
+              <img src="{{ course.teacher.avatar_url }}" alt="{{ course.teacher.name }}"
+                   title="{{ course.teacher.name }}" class="teacher-avatar">
               <div class="teacher-info">
-                <p class="teacher-name">Tuple</p>
-                <p class="teacher-identify"> 人生苦短</p>
+                <p class="teacher-name">{{ course.teacher.name }}</p>
+                <p class="teacher-identify">{{ course.teacher.positional_title }}</p>
               </div>
             </div>
             <div class="item-content">
-              人生苦短人生苦短人生苦短人生苦短人生苦短
+              {{ course.teacher.profile }}
             </div>
           </div>
           <div class="course-item clearfix">
             <h5 class="course-title">课程简介</h5>
             <div class="item-content">
-              人生苦短人生苦短人生苦短人生苦短人生苦短
+              {{ course.profile }}
             </div>
           </div>
           <div class="course-item clearfix">
             <h5 class="course-title">课程大纲</h5>
             <div class="item-content">
-              <p>人生苦短人生苦短人生苦短人生苦短</p>
+              <p>{{ course.outline }}</p>
             </div>
           </div>
           <div class="course-item clearfix">
@@ -69,22 +77,22 @@ courseDetail
               在潭州学习的学员已突破1000万人次在线学员覆盖全球，包括中国、加拿大、日本、美国、韩国等诸多国家。
             </div>
           </div>
-          <div class="course-item clearfix">
-            <div class="item-content">
-              <div class="item-course-title">123</div>
-              <div class="item-buy-list">
-                <span class="price">免费</span>
-              </div>
-            </div>
-          </div>
         </div>
         <div class="course-side">
           <h4 class="side-title">推荐课程</h4>
         </div>
       </div>
     </div>
+  </div>
+</main>
+<!-- main-contain  end -->
+
+
+
+
 {% endblock %}
 
 {% block script %}
-
+  <script src="https://cdn.bdstatic.com/jwplayer/latest/cyberplayer.js"></script>
+  <script src="{% static 'js/course/course_detail.js' %}"></script>
 {% endblock %}

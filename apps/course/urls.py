@@ -6,6 +6,6 @@ app_name = 'course'
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('index/',views.Course.as_view(),name='course'),
-    path('course-detail/',views.CourseDetail.as_view(),name='course_detail'),
+    path('course-detail/<int:course_id>/',views.CourseDetail.as_view(),name='course_detail'),
 
 ]
