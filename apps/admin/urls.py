@@ -6,5 +6,9 @@ app_name = 'admin'
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('', views.AdminIndex.as_view(),name='index'),
+    path('tags/',views.TagManageView.as_view(),name='tags'),
+    path('tags/<int:tag_id>/',views.TagEdit.as_view(),name='tags_edit'),
+    path('hotnews/',views.HotNewsManageView.as_view(),name='hot_news'),
+    path('hotnews/<int:hotnews_id>/',views.HotNewsEditView.as_view(),name='hot_news_edit'),
 
 ]

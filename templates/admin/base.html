@@ -23,6 +23,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         page. However, you can choose any other skin. Make sure you
         apply the skin class to the body tag so the changes take effect. -->
   <link rel="stylesheet" href="{% static 'css/admin/base/skins/skin-blue.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base/sweetalert.css' %}">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -274,11 +275,11 @@ desired effect
               </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="#">文章标签分类</a></li>
-            <li><a href="#">文章发布</a></li>
-            <li><a href="#">文章管理</a></li>
-            <li><a href="#">热门文章</a></li>
-            <li><a href="#">轮播图管理</a></li>
+            <li><a href="{% url 'admin:tags' %}"><i class="fa fa-tags"></i>文章标签分类</a></li>
+            <li><a href="#"><i class="fa fa-skyatlas"></i>文章发布</a></li>
+            <li><a href="#"><i class="fa fa-gear"></i>文章管理</a></li>
+            <li><a href="#"><i class="fa fa-fire"></i>热门文章</a></li>
+            <li><a href="#"><i class="fa fa-image"></i>轮播图管理</a></li>
           </ul>
         </li>
           <li class="header">文档相关</li>
@@ -426,6 +427,10 @@ desired effect
 <script src="{% static 'js/admin/base/bootstrap.min.js' %}"></script>
 <!-- AdminLTE App -->
 <script src="{% static 'js/admin/base/adminlte.min.js' %}"></script>
+<script src="{% static 'js/base/set_csrf.js' %}"></script>
+<script src="{% static 'js/base/fsweetalert.js' %}"></script>
+<script src="{% static 'js/base/sweetalert.min.js' %}"></script>
+<script src="{% static 'js/base/message.js' %}"></script>
 
 {% block script %}
 

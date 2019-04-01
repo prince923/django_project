@@ -1,0 +1,70 @@
+{%extends 'admin/base.html' %}
+
+{% block title %}
+热门文章管理
+{% endblock %}
+
+{% block link %}
+
+{% endblock %}
+
+{% block page_title %}
+热门文章管理
+{% endblock %}
+
+{% block page_desc %}
+在这里可以管理你的热门文章
+{% endblock %}
+
+{% block content %}
+ <div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+      <div class="box box-primary">
+        <div class="box-header">
+          <a href="" class="btn btn-primary pull-right"
+             id="btn-add-news-recommend">添加热门文章</a>
+        </div>
+        <div class="box-body">
+          <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+              <th>文章名称</th>
+              <th>文章分类</th>
+              <th>优先级</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            {% for hot_new in hot_news %}
+              <tr data-id="{{ hot_new.id }}" data-name="{{ hot_new.news.title }}">
+                <td>
+                  <a href="" data-news-id="{{ hot_new.news_id }}">
+                    {{ hot_new.news.title }}
+                  </a>
+                </td>
+
+                <td>{{ hot_new.news.tag.name }}</td>
+                <td>{{ hot_new.priority }}</td>
+                <td>
+                  <button class="btn btn-xs btn-warning btn-edit"
+                    data-priority="{{ hot_new.priority }}">编辑</button>
+                  <button class="btn btn-xs btn-danger btn-del">删除</button>
+
+                </td>
+              </tr>
+            {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+        <div class="box-footer"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/admin/hot_news/hot_news.js' %}"></script>
+{% endblock %}
