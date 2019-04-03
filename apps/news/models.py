@@ -26,7 +26,8 @@ class NewsModel(BaseModel):
     image_url = models.URLField(default="", verbose_name='图片url', help_text='图片url')
     author = models.ForeignKey('user.UserModel', verbose_name='新闻作者', help_text='新闻作者',
                                on_delete=models.SET_NULL, null=True)
-    tag = models.ForeignKey('TagModel', verbose_name='新闻标签', help_text='新闻标签', on_delete=models.SET_NULL, null=True)
+    tag = models.ForeignKey('TagModel', verbose_name='新闻标签', help_text='新闻标签', on_delete=models.SET_NULL, null=True,
+                          )
 
     class Meta:
         ordering = ['-update_time', '-id']
@@ -42,7 +43,7 @@ class CommentModel(BaseModel):
     content = models.TextField(verbose_name='评论内容', help_text='评论内容')
     news = models.ForeignKey('NewsModel', on_delete=models.CASCADE, verbose_name='评论新闻', help_text='评论新闻')
     author = models.ForeignKey('user.UserModel', on_delete=models.CASCADE, verbose_name='评论作者', help_text='评论作者')
-    parents = models.ForeignKey('self', on_delete=models.CASCADE,blank=True,null=True)  # 自关联，用于创建自评论
+    parents = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True)  # 自关联，用于创建自评论
 
     class Meta:
         ordering = ['-update_time', '-id']
@@ -55,15 +56,14 @@ class CommentModel(BaseModel):
 
 
 class NewsHots(BaseModel):
-
     PRI_CHOICES = [
-        (1,'第一级'),
-        (2,'第二级'),
-        (3,'第三级'),
+        (1, '第一级'),
+        (2, '第二级'),
+        (3, '第三级'),
     ]
 
     news = models.OneToOneField('NewsModel', on_delete=models.CASCADE)
-    priority = models.IntegerField(verbose_name='新闻优先级', help_text='新闻优先级',default=3,choices=PRI_CHOICES)
+    priority = models.IntegerField(verbose_name='新闻优先级', help_text='新闻优先级', default=3, choices=PRI_CHOICES)
 
     class Meta:
         ordering = ['-update_time', '-id']
@@ -76,7 +76,6 @@ class NewsHots(BaseModel):
 
 
 class NewsBanner(BaseModel):
-
     PRI_CHOICES = [
         (1, '第一级'),
         (2, '第二级'),
@@ -87,12 +86,12 @@ class NewsBanner(BaseModel):
     ]
 
     image_url = models.URLField(verbose_name='轮播图图片链接', help_text='轮播图图片链接')
-    priority = models.IntegerField(verbose_name='轮播图片优先级', help_text='轮播图片优先级',default=6,choices=PRI_CHOICES) # 优先级默认为第六级
+    priority = models.IntegerField(verbose_name='轮播图片优先级', help_text='轮播图片优先级', default=6,
+                                   choices=PRI_CHOICES)  # 优先级默认为第六级
     news = models.ForeignKey('NewsModel', on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ['priority','-update_time','-id']
+        ordering = ['priority', '-update_time', '-id']
         db_table = 'news_banner'
         verbose_name = '新闻轮播图'
         verbose_name_plural = verbose_name
-

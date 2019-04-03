@@ -1,6 +1,6 @@
 from django.db.models import Count
 from django.shortcuts import render
-from news.models import TagModel, NewsHots
+from news.models import TagModel, NewsHots, NewsModel
 import json
 import logging
 # Create your views here.
@@ -114,11 +114,60 @@ class HotNewsEditView(View):
         else:
             return to_json_data(errno=Code.NODATA, errmsg="该热门新闻未找到")
 
-    def delete(self, request,hotnews_id):
-        hot_new = NewsHots.objects.only('id').filter(is_delete=False,id=hotnews_id).first()
+    def delete(self, request, hotnews_id):
+        hot_new = NewsHots.objects.only('id').filter(is_delete=False, id=hotnews_id).first()
         if hot_new:
             hot_new.is_delete = True
             hot_new.save(update_fields=['is_delete'])
             return to_json_data(errmsg="热门新闻删除成功")
         else:
-            return to_json_data(errno=Code.NODATA,errmsg="该热门新闻不存在")
+            return to_json_data(errno=Code.NODATA, errmsg="该热门新闻不存在")
+
+
+class AddHotNewsView(View):
+    def get(self, request):
+        tags = TagModel.objects.values('id', 'tag_name').annotate(num_news=Count('newsmodel')). \
+            filter(is_delete=False).order_by('-num_news', '-update_time')
+        priority_dict = {k: v for k, v in NewsHots.PRI_CHOICES}
+        return render(request, 'admin/addhotnews.html', locals())
+
+    def post(self, request):
+        json_data = request.body
+        if not json_data:
+            return to_json_data(errno=Code.NODATA, errmsg=error_map[Code.NODATA])
+        else:
+            data_dict = json.loads(json_data.decode('utf8'))
+            news_id = data_dict.get('news_id')
+            priority = data_dict.get('priority')
+            if not news_id or not priority:
+                return to_json_data(errno=Code.NODATA, errmsg='新闻id和优先级为必填字段')
+            try:
+                news_id = int(news_id)
+            except Exception as e:
+                logger.error('新闻id类型错误{}'.format(e))
+                return to_json_data(errno=Code.DATAERR, errmsg='新闻id类型错误')
+            try:
+                priority = int(priority)
+            except Exception as e:
+                logger.error('优先级类型错误{}'.format(e))
+                return to_json_data(errno=Code.DATAERR, errmsg='优先级类型错误')
+            priority_list = [i for i, _ in NewsHots.PRI_CHOICES]
+            if priority in priority_list:
+                news = NewsModel.objects.only('id').filter(is_delete=False, id=news_id).exists()
+                if not news:
+                    return to_json_data(errno=Code.NODATA, errmsg='新闻不存在')
+                # get_or_create 有则查无则加, 返回一个元组 (obj,created)  如果对象存在created 为 True 不存在为False
+                news_tuple = NewsHots.objects.get_or_create(news_id=news_id)
+                hot_news, is_created = news_tuple
+                hot_news.priority = priority
+                hot_news.save(update_fields=['priority'])
+                return to_json_data(errmsg='热门新闻创建成功')
+            else:
+                return to_json_data(errno=Code.DATAERR, errmsg='优先级范围错误')
+
+
+class NewsBYTag(View):
+    def get(self, request, tag_id):
+        news = list(NewsModel.objects.values('id', 'title').filter(tag_id=tag_id, is_delete=False))
+        data = {'news': news}
+        return to_json_data(data=data)

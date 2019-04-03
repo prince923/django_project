@@ -10,5 +10,7 @@ urlpatterns = [
     path('tags/<int:tag_id>/',views.TagEdit.as_view(),name='tags_edit'),
     path('hotnews/',views.HotNewsManageView.as_view(),name='hot_news'),
     path('hotnews/<int:hotnews_id>/',views.HotNewsEditView.as_view(),name='hot_news_edit'),
+    path('addhotnews/',views.AddHotNewsView.as_view(),name='add_hot_news'),
+    path('tags/<int:tag_id>/news/',views.NewsBYTag.as_view(),name='news_by_tag'),
 
 ]
