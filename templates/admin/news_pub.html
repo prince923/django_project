@@ -1,0 +1,122 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}
+    {% if news  %}
+        文章编辑
+        {% else %}
+        文章发布
+    {% endif %}
+{% endblock %}
+
+{% block page_title %}
+{% if news %}
+文章编辑
+    {% else %}
+    文章发布
+{% endif %}
+{% endblock %}
+
+{% block page_desc %}
+{% if news %}
+在这里可以管理你的文章
+    {% else  %}
+    在这里可以发布你的文章
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12 col-xs-12 col-sm-12">
+    <div class="box box-primary">
+      <div class="box-body">
+        <div class="form-group">
+          <label for="news-title">文章标题</label>
+          {% if news %}
+            <input type="text" class="form-control" id="news-title" name="news-title" placeholder="请输入文章标题"
+                   value="{{ news.title }}">
+          {% else %}
+            <input type="text" class="form-control" id="news-title" name="news-title" placeholder="请输入文章标题" autofocus>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          <label for="news-desc">文章摘要</label>
+          {% if news %}
+            <textarea name="news-desc" id="news-desc" placeholder="请输入新闻描述" class="form-control"
+                      style="height: 8rem; resize: none;">{{ news.digest }}</textarea>
+          {% else %}
+            <textarea name="news-desc" id="news-desc" placeholder="请输入新闻描述" class="form-control"
+                      style="height: 8rem; resize: none;"></textarea>
+          {% endif %}
+        </div>
+        <div class="form-group">
+          <label for="news-category">文章分类</label>
+          <select name="news-category" id="news-category" class="form-control">
+            <option value="0">-- 请选择文章分类 --</option>
+            {% for one_tag in tags %}
+              <!-- 传tag_id到后台 -->
+              {% if news and one_tag == news.tag %}
+                <option value="{{ one_tag.id }}" selected>{{ one_tag.tag_name }}</option>
+              {% else %}
+                <option value="{{ one_tag.id }}">{{ one_tag.tag_name }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group" id="container">
+          <label for="news-thumbnail-url">文章缩略图</label>
+          <div class="input-group">
+            {% if news %}
+            <input type="text" class="form-control" id="news-thumbnail-url" name="news-thumbnail-url"
+                   placeholder="请上传图片或输入文章缩略图地址" value="{{ news.image_url }}">
+              {% else %}
+              <input type="text" class="form-control" id="news-thumbnail-url" name="news-thumbnail-url"
+                   placeholder="请上传图片或输入文章缩略图地址">
+            {% endif %}
+
+            <div class="input-group-btn">
+              <label class="btn btn-default btn-file">
+                上传至服务器 <input type="file" id="upload-news-thumbnail">
+              </label>
+              <button class="btn btn-info" id="upload-btn">上传至七牛云</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="progress" style="display: none">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0;">0%</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="news-content">文章内容</label>
+          {% if news %}
+            <div id="news-content">
+            {{ news.content | safe }}
+            </div>
+          {% else %}
+            <div id="news-content"></div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="box-footer">
+          {% if news %}
+            <a href="javascript:void (0);" class="btn btn-primary pull-right" id="btn-pub-news" data-news-id="{{ news.id }}">更新文章 </a>
+          {% else %}
+           <a href="javascript:void (0);" class="btn btn-primary pull-right" id="btn-pub-news">发布文章 </a>
+          {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="https://unpkg.com/wangeditor@3.1.1/release/wangEditor.min.js"></script>
+  {# 导入七牛云需要的3个js文件 #}
+  <script src="https://cdn.bootcss.com/plupload/2.1.9/moxie.min.js"></script>
+  <script src="https://cdn.bootcss.com/plupload/2.1.9/plupload.dev.js"></script>
+  {# 这3个js文件有依赖关系，qiniu.min.js需要放在后面 #}
+  <script src="https://cdn.bootcss.com/qiniu-js/1.0.17.1/qiniu.min.js"></script>
+  <script src="{% static 'js/admin/base/fqiniu.js' %}"></script>
+    <script src="{% static 'js/admin/news/news_pub.js' %}"></script>
+{% endblock %}

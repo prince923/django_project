@@ -1,5 +1,12 @@
+from datetime import datetime
+from urllib.parse import urlencode
+
+from django.core.paginator import Paginator, EmptyPage
 from django.db.models import Count
+from django.http import Http404
 from django.shortcuts import render
+
+from admin.forms import NewsPubForm
 from news.models import TagModel, NewsHots, NewsModel
 import json
 import logging
@@ -8,6 +15,7 @@ from django.views import View
 
 from utils.json_fun import to_json_data
 from utils.res_code import Code, error_map
+from scripts import paginator_script
 
 logger = logging.getLogger('django')
 
@@ -171,3 +179,132 @@ class NewsBYTag(View):
         news = list(NewsModel.objects.values('id', 'title').filter(tag_id=tag_id, is_delete=False))
         data = {'news': news}
         return to_json_data(data=data)
+
+
+class NewsManageView(View):
+    def get(self, request):
+        # 获取搜索参数
+        tags = TagModel.objects.only('id', 'tag_name').filter(is_delete=False)
+        start_time = request.GET.get('start_time', '')
+        end_time = request.GET.get('end_time', '')
+        title = request.GET.get('title', '')
+        author_name = request.GET.get('author_name', '')
+        tag_id = request.GET.get('tag_id', 0)
+        page = request.GET.get('page', 1)
+        try:
+            start_time = datetime.strptime(start_time, '%Y%m%d') if start_time else ''
+            end_time = datetime.strptime(end_time, '%Y%m%d') if end_time else ''
+        except Exception as e:
+            logger.error('时间格式有误{}'.format(e))
+            start_time = end_time = ''
+        try:
+            tag_id = int(tag_id)
+        except Exception as e:
+            logger.error('tag_id 错误 {}'.format(e))
+            tag_id = 0
+        try:
+            page = int(page)
+        except Exception as e:
+            logger.error('page 类型错误{}'.format(e))
+            page = 1
+        news = NewsModel.objects.select_related('author', 'tag'). \
+            only('id', 'title', 'digest', 'author__username', 'tag__tag_name', 'update_time').filter(is_delete=False)
+        # 判断时间
+        if start_time and not end_time:
+            news = news.filter(update_time__lte=start_time)
+        if end_time and not start_time:
+            news = news.filter(update_time__gte=end_time)
+        if start_time and end_time:
+            news = news.filter(update_time__range=(start_time, end_time))
+        if title:
+            news = news.filter(title__icontains=title)
+        if author_name:
+            news = news.filter(author__username__icontains=author_name)
+        news = news.filter(tag_id=tag_id) or news
+        paginator = Paginator(news, 8)
+        try:
+            news_info = paginator.page(page)
+        except EmptyPage:
+            logger.error('page大于总页数')
+            news_info = paginator.page(paginator.num_pages)
+        paginator_data = paginator_script.get_paginator_data(paginator, news_info)
+        start_time = start_time.strftime('%Y/%m/%d') if start_time else ''
+        end_time = end_time.strftime('%Y/%m/%d') if end_time else ''
+        context = {
+            'news_info': news_info,
+            'tags': tags,
+            'paginator': paginator,
+            'start_time': start_time,
+            "end_time": end_time,
+            "title": title,
+            "author_name": author_name,
+            "tag_id": tag_id,
+            "other_param": urlencode({
+                "start_time": start_time,
+                "end_time": end_time,
+                "title": title,
+                "author_name": author_name,
+                "tag_id": tag_id,
+            })
+        }
+        context.update(paginator_data)
+        return render(request, 'admin/news_manage.html', context=context)
+
+
+class NewsEditView(View):
+    def get(self, request, news_id):
+        news = NewsModel.objects.filter(is_delete=False, id=news_id).first()
+        if not news:
+            return Http404('新闻不存在')
+        else:
+            tags = TagModel.objects.only('id', 'tag_name').filter(is_delete=False)
+        context = {
+            'news': news,
+            'tags': tags
+        }
+        return render(request, 'admin/news_pub.html', context=context)
+
+    def put(self, request, news_id):
+        news = NewsModel.objects.only('id').filter(is_delete=False, id=news_id).first()
+        if not news:
+            return Http404('新闻不存在')
+        else:
+            json_data = request.body
+            if not json_data:
+                return to_json_data(errno=Code.NODATA, errmsg=error_map[Code.NODATA])
+            else:
+                dict_data = json.loads(json_data.decode('utf8'))
+            forms = NewsPubForm(data=dict_data)
+            if forms.is_valid():
+                news.title = forms.cleaned_data.get('title')
+                news.digest = forms.cleaned_data.get('digest')
+                news.image_url = forms.cleaned_data.get('image_url')
+                news.content = forms.cleaned_data.get('content')
+                news.tag_id = forms.cleaned_data.get('tag_id')
+                news.save()
+                return to_json_data(errmsg="文章更新成功")
+            else:
+                err_msg_list = []
+                for item in forms.errors.get_json_data().values():
+                    err_msg_list.append(item[0].get('message'))
+                    # print(item[0].get('message'))   # for test
+                err_msg_str = '/'.join(err_msg_list)  # 拼接错误信息为一个字符串
+                return to_json_data(errno=Code.PARAMERR, errmsg=err_msg_str)
+
+    def delete(self,request,news_id):
+        news = NewsModel.objects.filter(is_delete=False, id=news_id).first()
+        if not news:
+            return Http404('新闻不存在')
+        else:
+            news.is_delete = True
+            news.save(update_fields=['is_delete'])
+            return to_json_data(errmsg='文章删除成功')
+
+
+class NewsPubView(View):
+    def get(self,request):
+        tags = TagModel.objects.only('id','tag_name').filter(is_delete=False)
+        return render(request,'admin/news_pub.html',locals())
+
+    def post(self,request):
+        pass

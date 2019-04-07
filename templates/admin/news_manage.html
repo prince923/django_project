@@ -1,0 +1,170 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}
+新闻管理
+{% endblock %}
+
+{% block page_title %}
+新闻管理
+{% endblock %}
+
+{% block page_desc %}
+在这里可以管理你的新闻
+{% endblock %}
+
+{% block link %}
+
+{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/admin/base/bootstrap-datepicker.min.css' %}">
+ <style>
+   .ml20 {
+     margin-left: 20px;
+   }
+
+   .mt20 {
+     margin-top: 20px;
+   }
+ </style>
+ <div class="box">
+   <div class="box header" style="margin: 0;">
+     <form action="" class="form-inline">
+       <div class="form-group ml20 mt20">
+         <label for="select-time">时间：</label>
+         {% if start_time %}
+         <input type="text" class="form-control" placeholder="请选择起始时间" readonly
+                id="select-time" name="start_time" value="{{ start_time }}">
+           {% else %}
+           <input type="text" class="form-control" placeholder="请选择起始时间" readonly
+                  id="select-time" name="start_time">
+         {% endif %}
+         -
+          {% if end_time %}
+        <input type="text" class="form-control" placeholder="请选择结束时间" readonly
+               name="end_time" value="{{ end_time }}">
+          {% else %}
+            <input type="text" class="form-control" placeholder="请选择结束时间" readonly name="end_time">
+          {% endif %}
+       </div>
+       <div class="form-group ml20 mt20">
+         <label for="title">标题：</label>
+         {% if title %}
+           <input type="text" class="form-control" placeholder="请输入标题" id="title" name="title" value="{{ title }}">
+           {% else %}
+          <input type="text" class="form-control" placeholder="请输入标题" id="title" name="title">
+         {% endif %}
+
+       </div>
+       <div class="form-group ml20 mt20">
+         <label for="author">作者：</label>
+         {% if author_name %}
+           <input type="text" class="form-control" placeholder="请输入作者" id="author" name="author_name"
+                  value="{{ author_name }}">
+         {% else %}
+           <input type="text" class="form-control" placeholder="请输入作者" id="author" name="author_name">
+         {% endif %}
+       </div>
+       <div class="form-group ml20 mt20">
+         <label for="tag">标签：</label>
+         <select class="form-control" id="tag" name="tag_id">
+           <option value="0">--请选择标签--</option>
+           {% for one_tag in tags %}
+
+             {% if tag_id and one_tag.id == tag_id %}
+               <option value="{{ one_tag.id }}" selected>{{ one_tag.tag_name }}</option>
+             {% else %}
+               <option value="{{ one_tag.id }}">{{ one_tag.tag_name }}</option>
+             {% endif %}
+
+           {% endfor %}
+         </select>
+       </div>
+       <div class="form-group ml20 mt20">
+         <button class="btn btn-primary">查询</button>
+         <a href="{% url 'admin:news_manage' %}" class="btn btn-info ml20">清除查询</a>
+       </div>
+     </form>
+   </div>
+   <div class="box-body">
+     <table class="table table-bordered table-hover">
+       <thead>
+       <tr>
+         <th>标题</th>
+         <th>作者</th>
+         <th>标签</th>
+         <th>发布时间</th>
+         <th>操作</th>
+       </tr>
+       </thead>
+       <tbody>
+        {% for one_news in news_info %}
+          <tr>
+           <td><a href="{% url 'news:news_detail' one_news.id%}" target="_blank">{{ one_news.title }}</a></td>
+           <td>{{ one_news.author.username }}</td>
+           <td>{{ one_news.tag.tag_name }}</td>
+           <td>{{ one_news.update_time }}</td>
+           <td>
+             <a href="{% url 'admin:news_edit' one_news.id %}" class="btn btn-xs btn-warning">编辑</a>
+             <a href="javascript:void 0 " class="btn btn-xs btn-danger btn-del" data-news-id="{{ one_news.id }}">删除</a>
+           </td>
+         </tr>
+        {% endfor %}
+
+
+       </tbody>
+     </table>
+   </div>
+   <div class="box-footer">
+     <span class="pull-left">第{{ current_page_num }}页/总共{{ total_page_num }}页</span>
+     <nav class="pull-right">
+       <!-- 分页 -->
+       <ul class="pagination">
+         <!-- 上一页 -->
+         {% if news_info.has_previous %}
+            <li><a href="?page={{ news_info.previous_page_number }}&{{ other_param }}">上一页</a></li>
+           {% else %}
+           <li class="disabled"><a href="javascript:void(0);">上一页</a></li>
+         {% endif %}
+
+          {% if left_has_more_page %}
+            <li><a href="?page=1&{{ other_param }}">1</a></li>
+            <li><a href="javascript:void(0);">...</a></li>
+          {% endif %}
+          <!-- 左边的页码 -->
+          {% for left_page in left_pages %}
+            <li><a href="?page={{ left_page }}&{{ other_param }}">{{ left_page }}</a></li>
+          {% endfor %}
+
+          <!-- 当前页面 -->
+          {% if current_page_num %}
+            <li class="active"><a href="?page={{ current_page_num }}&{{ other_param }}">{{ current_page_num }}</a></li>
+          {% endif %}
+          <!-- 右边的页面 -->
+          {% for right_page in right_pages %}
+              <li><a href="?page={{ right_page }}&{{ other_param }}">{{ right_page }}</a></li>
+          {% endfor %}
+
+         {% if right_has_more_page %}
+          <li><a href="javascript:void(0);">...</a></li>
+            <li><a href="?page={{ total_page_num }}&{{ other_param }}">{{ total_page_num }}</a></li>
+        {% endif %}
+
+         <!-- 下一页 -->
+          {% if news_info.has_next %}
+            <li><a href="?page={{ news_info.next_page_number }}&{{ other_param }}">下一页</a></li>
+            {% else %}
+            <li class="disabled"><a href="javascript:void(0);">下一页</a></li>
+          {% endif %}
+
+       </ul>
+     </nav>
+   </div>
+ </div>
+{% endblock %}
+
+{% block script %}
+ <script src="{% static 'js/admin/news/bootstrap-datepicker.min.js' %}"></script>
+ <script src="{% static 'js/admin/news/bootstrap-datepicker.zh-CN.min.js' %}"></script>
+    <script src="{% static 'js/admin/news/news_manage.js' %}"></script>
+{% endblock %}
