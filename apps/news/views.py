@@ -19,7 +19,7 @@ logger = logging.getLogger('django')
 
 
 class IndexView(View):
-    def get(self, request):
+    def get(self, request: object) -> object:
         tags = TagModel.objects.only('tag_name').filter(is_delete=False)  # only 会改变查询语句，只会查询  id  tag_name 字段
         news_hots = NewsHots.objects.select_related('news').only('news__title', 'news__image_url', 'news_id').filter(
             is_delete=False).order_by('priority', '-id')[0:constant.NEWS_HOTS_SHOW_COUNT]
@@ -40,7 +40,7 @@ class NewsList(View):
     5. 返回数据
     """
 
-    def get(self, request):
+    def get(self, request: object) -> object:
         try:
             page = int(request.GET.get('page', 1))
         except Exception as e:
@@ -86,7 +86,7 @@ class NewsDetailView(View):
    create  news_detail and news comments  View
     """
 
-    def get(self, request, news_id):
+    def get(self, request: object, news_id: object) -> object:
         news = NewsModel.objects.select_related('tag', 'author'). \
             only('id', 'title', 'content', 'author__username', 'tag__tag_name', 'update_time'). \
             filter(is_delete=False, id=news_id).first()
@@ -146,7 +146,7 @@ class NewsBannerView(View):
     create news_banner  View
     """
 
-    def get(self, request):
+    def get(self, request: object) -> object:
         banners = NewsBanner.objects.select_related('news').only('image_url', 'news_id', 'news__title').filter(
             is_delete=False)[0:6]
         banner_list = []

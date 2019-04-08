@@ -12,7 +12,7 @@ logger = logging.getLogger('django')  # 导入日志器
 
 
 class DocIndex(View):
-    def get(self, request):
+    def get(self, request: object) -> object:
         docs = DocModel.objects.defer('author', 'is_delete', 'create_time', 'update_time').filter(is_delete=False)
         return render(request, 'doc/docDownload.html', locals())
 

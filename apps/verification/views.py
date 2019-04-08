@@ -19,7 +19,7 @@ class ImageVerification(View):
     :return 图片验证码
     """
 
-    def get(self, request, image_code_id):
+    def get(self, request: object, image_code_id: object) -> object:
         text, image = captcha.generate_captcha()
         con_redis = get_redis_connection(alias='verify_codes')
         img_key = 'img_{}'.format(image_code_id).encode('utf-8')

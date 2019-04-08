@@ -15,5 +15,7 @@ urlpatterns = [
     path('news/',views.NewsManageView.as_view(),name='news_manage'),
     path('news/<int:news_id>/',views.NewsEditView.as_view(),name='news_edit'),
     path('news/pub/',views.NewsPubView.as_view(),name='news_pub'),
+    path('news/images/', views.UploadImage.as_view(), name='upload_image'),
+    path('token/', views.UploadToken.as_view(), name='upload_token'),  # 七牛云上传图片需要调用token
 
 ]

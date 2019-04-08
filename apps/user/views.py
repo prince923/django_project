@@ -26,7 +26,7 @@ class LoginView(View):
     4. 返回json数据
     """
 
-    def get(self, request):
+    def get(self, request: object) -> object:
         return render(request, 'user/login.html')
 
     def post(self, request):
@@ -50,14 +50,14 @@ class LoginView(View):
 
 
 class LogoutView(View):
-    def get(self,request):
+    def get(self, request: object) -> object:
         logout(request)
         return redirect('/user/login/')
 
 
 
 class RegisterView(View):
-    def get(self, request):
+    def get(self, request: object) -> object:
         return render(request, 'user/register.html')
 
     def post(self, request):
@@ -90,7 +90,7 @@ class CheckUsername(View):
     count  1 为存在  0 为不存在
     """
 
-    def get(self, request, username):
+    def get(self, request: object, username: object) -> object:
         count = UserModel.objects.filter(username=username).count()
         data = {
             'username': username,
@@ -104,7 +104,7 @@ class CheckMobile(View):
     判断手机号是否存在
     """
 
-    def get(self, request, mobile):
+    def get(self, request: object, mobile: object) -> object:
         data = {
             'mobile': mobile,
             'count': UserModel.objects.filter(mobile=mobile).count()

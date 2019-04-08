@@ -42,7 +42,7 @@ $(function () {
     // ================== 上传至七牛（云存储平台） ================
     let $progressBar = $(".progress-bar");
     QINIU.upload({
-        "domain": "http://pl3yncr1e.bkt.clouddn.com/",  // 七牛空间域名
+        "domain": "http://ppmd5bmae.bkt.clouddn.com/",  // 七牛空间域名
         "uptoken_url": "/admin/token/",	 // 后台返回 token的地址
         "browse_btn": "upload-btn",		// 按钮
         "success": function (up, file, info) {	 // 成功
