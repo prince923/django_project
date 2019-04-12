@@ -17,5 +17,14 @@ urlpatterns = [
     path('news/pub/',views.NewsPubView.as_view(),name='news_pub'),
     path('news/images/', views.UploadImage.as_view(), name='upload_image'),
     path('token/', views.UploadToken.as_view(), name='upload_token'),  # 七牛云上传图片需要调用token
-
+    path('banners/',views.BannerManagerView.as_view(), name='banner_manager'),
+    path('banners/<int:banner_id>/',views.BannerEditView.as_view(), name='banner_edit'),
+    path('banners/add/',views.BannerAddView.as_view(), name='banner_add'),
+    path('docs/',views.DocManagerView.as_view(), name='doc_manager'),
+    path('docs/<int:doc_id>/',views.DocEditView.as_view(), name='doc_edit'),
+    path('docs/files/',views.DocUploadView.as_view(), name='doc_file_upload'),
+    path('docs/pub/',views.DocPubView.as_view(), name='doc_pub'),
+    path('courses/',views.CourseManageView.as_view(), name='courses_manage'),
+    path('courses/<int:course_id>/',views.CourseEditView.as_view(), name='courses_edit'),
+    path('courses/pub/',views.CoursePubView.as_view(), name='courses_pub'),
 ]

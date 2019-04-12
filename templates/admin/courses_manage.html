@@ -1,0 +1,50 @@
+{% extends 'admin/base.html' %}
+
+
+{% block title %}
+课程管理
+{% endblock %}
+
+{% block page_title %}
+课程管理
+{% endblock %}
+
+{% block page_desc %}
+在这里可以管理你的课程
+{% endblock %}
+
+{% block content %}
+ <div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+      <div class="box box-primary">
+{#        <div class="box-header">#}
+{#          <button class="btn btn-primary pull-right" id="btn-add-tag">添加课程</button>#}
+{#        </div>#}
+        <div class="box-body">
+          <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+              <th>课程标题</th>
+              <th>课程类别</th>
+              <th>讲师名</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            {% for one_course in courses %}
+              <tr data-id="{{ one_course.id }}" data-name="{{ one_course.title }}">
+                <td>{{ one_course.title }}</td>
+                <td>{{ one_course.category.name }}</td>
+                <td>{{ one_course.teacher.name }}</td>
+                <td>
+{#                  <button class="btn btn-xs btn-warning btn-edit">编辑</button>#}
+                  <a href="{% url 'admin:courses_edit' one_course.id%}" class="btn btn-xs btn-warning btn-edit">编辑</a>
+                  <button class="btn btn-xs btn-danger btn-del">删除</button>
+                </td>
+              </tr>
+    {% endfor %}
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/admin/course/course_manage.js' %}"></script>
+{% endblock %}

@@ -10,9 +10,11 @@ from django.http import Http404
 from django.shortcuts import render
 from django.http import JsonResponse
 
-from admin.forms import NewsPubForm
+from admin.forms import NewsPubForm, DocPubForm, CoursePubForm
 from django_project import settings
-from news.models import TagModel, NewsHots, NewsModel
+from news.models import TagModel, NewsHots, NewsModel, NewsBanner
+from doc.models import DocModel
+from course.models import CourseModel,TeachModel,CourseCategory
 
 # Create your views here.
 from fdfs_client.client import Fdfs_client
@@ -285,7 +287,7 @@ class NewsEditView(View):
                 news.digest = forms.cleaned_data.get('digest')
                 news.image_url = forms.cleaned_data.get('image_url')
                 news.content = forms.cleaned_data.get('content')
-                news.tag_id = forms.cleaned_data.get('tag_id')
+                news.tag_id = forms.cleaned_data.get('tag')
                 news.save()
                 return to_json_data(errmsg="文章更新成功")
             else:
@@ -357,7 +359,7 @@ class UploadImage(View):
                     ex_name = 'jpg'
                 try:
                     FDFS_Client = Fdfs_client(settings.FDFS_CLIENT_CONF_FILE)
-                    upload_res =FDFS_Client.upload_by_buffer(image_file.read(),ex_name)
+                    upload_res = FDFS_Client.upload_by_buffer(image_file.read(), ex_name)
                 except Exception as e:
                     logger.error('文件上传异常{}'.format(e))
                     return to_json_data(errno=Code.DATAERR, errmsg="文件上传异常")
@@ -384,3 +386,286 @@ class UploadToken(View):
         q = qiniu.Auth(access_key, secret_key)
         token = q.upload_token(bucket_name)
         return JsonResponse({'uptoken': token})
+
+
+class BannerManagerView(View):
+    def get(self, request):
+        priority_dict = dict(NewsBanner.PRI_CHOICES)
+        banners = NewsBanner.objects.only('id', 'priority', 'image_url').filter(is_delete=False)
+        return render(request, 'admin/news_banner.html', locals())
+
+
+class BannerEditView(View):
+    def put(self, request, banner_id):
+        banner = NewsBanner.objects.only('id').filter(is_delete=False, id=banner_id).first()
+        if not banner:
+            return to_json_data(errno=Code.NODATA, errmsg="轮播图未找到")
+        else:
+            json_data = request.body
+            if not json_data:
+                return to_json_data(errno=Code.NODATA, errmsg="没有数据")
+            else:
+                dict_data = json.loads(json_data.decode('utf8'))
+            try:
+                priority = int(dict_data.get('priority'))
+            except Exception as e:
+                logger.error('优先级错误 {}'.format(e))
+                return to_json_data(errno=Code.DATAERR, errmsg="优先级错误")
+            if priority not in [i for i, _ in NewsBanner.PRI_CHOICES]:
+                return to_json_data(errno=Code.DATAERR, errmsg="优先级范围错误")
+            image_url = dict_data.get('image_url')
+            if not image_url:
+                return to_json_data(errno=Code.NODATA, errmsg="轮播图url不能为空")
+            if image_url == banner.image_url and priority == banner.priority:
+                return to_json_data(errno=Code.DATAEXIST, errmsg="数据未改变")
+            banner.image_url = image_url
+            banner.priority = priority
+            banner.save(update_fields=['image_url', 'priority'])
+            return to_json_data(errmsg="轮播图更新成功")
+
+    def delete(self, request, banner_id):
+        banner = NewsBanner.objects.only('id').filter(is_delete=False, id=banner_id).first()
+        if not banner:
+            return to_json_data(errno=Code.NODATA, errmsg="轮播图未找到")
+        else:
+            banner.is_delete = True
+            banner.save(update_fields=['is_delete'])
+            return to_json_data(errmsg="轮播图删除成功")
+
+
+class BannerAddView(View):
+    def get(self, request):
+        tags = TagModel.objects.values('id', 'tag_name').annotate(news_count=Count('newsmodel')) \
+            .filter(is_delete=False).order_by('-news_count', '-update_time')
+        priority_dict = dict(NewsBanner.PRI_CHOICES)
+        return render(request, 'admin/news_banner_add.html', locals())
+
+    def post(self, request):
+        json_data = request.body
+        if not json_data:
+            return to_json_data(errno=Code.NODATA, errmsg="没有数据")
+        else:
+            dict_data = json.loads(json_data.decode('utf8'))
+        try:
+            news_id = int(dict_data.get('news_id'))
+        except Exception as e:
+            logger.error('news_id 错误 {}'.format(e))
+            return to_json_data(errno=Code.DATAERR, errmsg="参数错误")
+        else:
+            news = NewsModel.objects.only('id').filter(id=news_id, is_delete=False).exists()
+            if not news:
+                return to_json_data(errno=Code.DATAERR, errmsg="新闻不存在")
+        try:
+            priority = int(dict_data.get('priority'))
+        except Exception as e:
+            logger.error('priority  错误 {}'.format(e))
+            return to_json_data(errno=Code.DATAERR, errmsg="参数错误")
+        else:
+            if priority not in [i for i, _ in NewsBanner.PRI_CHOICES]:
+                return to_json_data(errno=Code.DATAERR, errmsg="优先级范围错误")
+        image_url = dict_data.get('image_url')
+        if not image_url:
+            return to_json_data(errno=Code.NODATA, errmsg="图片url不能为空")
+        banner_tuple = NewsBanner.objects.get_or_create(priority=priority, image_url=image_url, news_id=news_id)
+        # is_created 如果有 False   如果没有就为True
+        banner, is_created = banner_tuple
+        if not is_created:
+            return to_json_data(errno=Code.DATAEXIST, errmsg="轮播图已存在")
+        else:
+            banner.priority = priority
+            banner.image_url = image_url
+            banner.news_id = news_id
+            banner.save(update_fields=['priority', 'image_url', 'news_id'])
+            return to_json_data(errmsg="轮播图创建成功")
+
+
+class DocManagerView(View):
+    def get(self, request):
+        docs = DocModel.objects.only('id', 'title', 'update_time').filter(is_delete=False)
+        return render(request, 'admin/doc_manage.html', locals())
+
+
+class DocEditView(View):
+    def get(self, request, doc_id):
+        doc = DocModel.objects.defer('update_time', 'create_time', 'is_delete'). \
+            filter(id=doc_id, is_delete=False).first()
+        if not doc:
+            return to_json_data(errno=Code.NODATA, errmsg="文档不存在")
+        return render(request, 'admin/docs_pub.html', locals())
+
+    def delete(self, request, doc_id):
+        doc = DocModel.objects.only('id').filter(is_delete=False, id=doc_id).first()
+        if not doc:
+            return to_json_data(errno=Code.NODATA, errmsg="文档不存在")
+        else:
+            doc.is_delete = True
+            doc.save(update_fields=['is_delete'])
+            return to_json_data(errmsg="文档删除成功")
+
+    def put(self, request, doc_id):
+        doc = DocModel.objects.only('id').filter(is_delete=False, id=doc_id).first()
+        if not doc:
+            return to_json_data(errno=Code.NODATA, errmsg="文档不存在")
+        json_data = request.body
+        if not json_data:
+            return to_json_data(errno=Code.NODATA, errmsg="没有数据")
+        else:
+            dict_data = json.loads(json_data.decode('utf8'))
+        forms = DocPubForm(data=dict_data)
+        if forms.is_valid():
+            doc.file_url = forms.cleaned_data.get('file_url')
+            doc.image_url = forms.cleaned_data.get('image_url')
+            doc.title = forms.cleaned_data.get('title')
+            doc.desc = forms.cleaned_data.get('desc')
+            doc.save(update_fields=['file_url', 'image_url', 'title', 'desc'])
+            return to_json_data(errmsg="文档更新成功")
+        else:
+            err_msg_list = []
+            for item in forms.errors.get_json_data().values():
+                err_msg_list.append(item[0].get('message'))
+                # print(item[0].get('message'))   # for test
+            err_msg_str = '/'.join(err_msg_list)  # 拼接错误信息为一个字符串
+            return to_json_data(errno=Code.PARAMERR, errmsg=err_msg_str)
+
+
+class DocUploadView(View):
+    def post(self, request):
+        text_file = request.FILES.get('text_file')
+        if not text_file:
+            return to_json_data(errno=Code.NODATA, errmsg="没有数据")
+        if text_file.content_type not in ('application/octet-stream', 'application/pdf',
+                                          'application/zip', 'text/plain', 'application/x-rar'):
+            return to_json_data(errno=Code.DATAERR, errmsg='不能上传非文本文件')
+        try:
+            ex_name = text_file.name.split('.')[-1]
+        except Exception as e:
+            logger.error('文档后缀名错误: {}'.format(e))
+            ex_name = 'pdf'
+        try:
+            FDFS_Client = Fdfs_client(settings.FDFS_CLIENT_CONF_FILE)
+            upload_res = FDFS_Client.upload_by_buffer(text_file.read(), ex_name)
+        except Exception as e:
+            logger.error('文件上传异常{}'.format(e))
+            return to_json_data(errno=Code.DATAERR, errmsg="文件上传异常")
+        else:
+            res = upload_res.get('Status')
+            if res != 'Upload successed.':
+                return to_json_data(errno=Code.DATAERR, errmsg="文件上传失败")
+            else:
+                text_name = upload_res.get('Remote file_id')
+                text_url = settings.FAST_DFS_TRACKER_DOMAIN + text_name
+                return to_json_data(errmsg="文档上传成功", data={'text_url': text_url})
+
+
+class DocPubView(View):
+    def get(self, request):
+        return render(request, 'admin/docs_pub.html')
+
+    def post(self, request):
+        json_data = request.body
+        if not json_data:
+            return to_json_data(errno=Code.NODATA, errmsg="没有数据")
+        else:
+            dict_data = json.loads(json_data.decode('utf8'))
+        forms = DocPubForm(data=dict_data)
+        if forms.is_valid():
+            doc = forms.save(commit=False)
+            doc.author = request.user
+            doc.save()
+            return to_json_data(errmsg="文档发布成功")
+        else:
+            err_msg_list = []
+            for item in forms.errors.get_json_data().values():
+                err_msg_list.append(item[0].get('message'))
+                # print(item[0].get('message'))   # for test
+            err_msg_str = '/'.join(err_msg_list)  # 拼接错误信息为一个字符串
+            return to_json_data(errno=Code.PARAMERR, errmsg=err_msg_str)
+
+
+class CourseManageView(View):
+    def get(self, request):
+        courses = CourseModel.objects.select_related('teacher', 'category'). \
+            only('id', 'title', 'teacher__name', 'category__name').filter(is_delete=False)
+        return render(
+            request, 'admin/courses_manage.html', locals()
+        )
+
+
+class CourseEditView(View):
+    def get(self,request,course_id):
+        course = CourseModel.objects.filter(is_delete=False,id=course_id).first()
+        if not course:
+            return Http404('此课程未找到')
+        else:
+            teachers = TeachModel.objects.only('id','name').filter(is_delete=False)
+            categories = CourseCategory.objects.only('id','name').filter(is_delete=False)
+            return render(request,'admin/course_pub.html',locals())
+
+    def put(self,request,course_id):
+        course = CourseModel.objects.only('id').filter(is_delete=False,id = course_id).first()
+        if not course:
+            return to_json_data(errno=Code.NODATA, errmsg="课程未找到")
+        json_data = request.body
+        if not json_data:
+            return to_json_data(errno=Code.NODATA,errmsg="数据不存在")
+        else:
+            dict_data = json.loads(json_data.decode('utf8'))
+        forms = CoursePubForm(data=dict_data)
+        if forms.is_valid():
+            course.title = forms.cleaned_data.get('title')
+            course.video_url = forms.cleaned_data.get('video_url')
+            course.cover_url = forms.cleaned_data.get('cover_url')
+            course.profile = forms.cleaned_data.get('profile')
+            course.duration = forms.cleaned_data.get('duration')
+            course.outline = forms.cleaned_data.get('outline')
+            course.teacher_id = forms.cleaned_data.get('teacher')
+            course.category_id = forms.cleaned_data.get('category')
+            course.save()
+            return to_json_data(errmsg="课程更新成功")
+        else:
+            err_msg_list = []
+            for item in forms.errors.get_json_data().values():
+                err_msg_list.append(item[0].get('message'))
+                # print(item[0].get('message'))   # for test
+            err_msg_str = '/'.join(err_msg_list)  # 拼接错误信息为一个字符串
+            return to_json_data(errno=Code.PARAMERR, errmsg=err_msg_str)
+
+    def delete(self,request,course_id):
+        course = CourseModel.objects.only('id').filter(id=course_id,is_delete=False).first()
+        if not course:
+            return to_json_data(errno=Code.NODATA,errmsg="课程未找到")
+        else:
+            course.is_delete = True
+            course.save(update_fields=['is_delete'])
+            return to_json_data(errmsg="课程删除成功")
+
+
+class CoursePubView(View):
+    def get(self,request):
+        teachers = TeachModel.objects.only('id', 'name').filter(is_delete=False)
+        categories = CourseCategory.objects.only('id', 'name').filter(is_delete=False)
+        return render(request,'admin/course_pub.html',locals())
+
+    def post(self,request):
+        json_data = request.body
+        if not json_data:
+            return to_json_data(errno=Code.NODATA, errmsg="数据不存在")
+        else:
+            dict_data = json.loads(json_data.decode('utf8'))
+        forms = CoursePubForm(data=dict_data)
+        if forms.is_valid():
+            forms.save()
+            return to_json_data(errmsg="课程发布成功")
+        else:
+            err_msg_list = []
+            for item in forms.errors.get_json_data().values():
+                err_msg_list.append(item[0].get('message'))
+                # print(item[0].get('message'))   # for test
+            err_msg_str = '/'.join(err_msg_list)  # 拼接错误信息为一个字符串
+            return to_json_data(errno=Code.PARAMERR, errmsg=err_msg_str)
+
+
+
+
+
+

@@ -1,0 +1,179 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}
+{% if course %}
+课程编辑
+    {% else %}
+    课程发布
+{% endif %}
+{% endblock %}
+
+{% block page_title %}
+{% if course %}
+课程编辑
+    {% else %}
+    课程发布
+{% endif %}
+{% endblock %}
+
+{% block page_desc %}
+{% if course %}
+在这里可以编辑你的课程
+    {% else %}
+    在这里可以发布你的课程
+{% endif %}
+{% endblock %}
+
+{% block content %}
+ <div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+      <div class="box box-primary">
+        <div class="box-body">
+
+          <div class="form-group" style="margin-top: 30px;">
+            <label for="news-title">课程标题(150个字以内)</label>
+            {% if course %}
+              <input type="text" class="form-control" id="news-title" name="news-title" placeholder="请输入课程标题"
+                     value="{{ course.title }}">
+            {% else %}
+              <input type="text" class="form-control" id="news-title" name="news-title" placeholder="请输入课程标题"
+                     autofocus>
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="news-desc">课程简介</label>
+            {% if course %}
+              <textarea name="news-desc" id="news-desc" placeholder="请输入课程简介" class="form-control"
+                        style="height: 8rem; resize: none;">{{ course.profile }}</textarea>
+            {% else %}
+              <textarea name="news-desc" id="news-desc" placeholder="请输入课程简介" class="form-control"
+                        style="height: 8rem; resize: none;"></textarea>
+            {% endif %}
+          </div>
+
+
+          <div class="form-group" id="container">
+            <label for="news-thumbnail-url">课程封面图</label>
+            <div class="input-group">
+              {% if course %}
+                <input type="text" class="form-control" id="news-thumbnail-url" name="news-thumbnail-url"
+                       placeholder="请上传图片或输入封面图地址" value="{{ course.cover_url }}">
+              {% else %}
+                <input type="text" class="form-control" id="news-thumbnail-url" name="news-thumbnail-url"
+                       placeholder="请上传图片或输入封面图地址">
+              {% endif %}
+
+              <div class="input-group-btn">
+                <label class="btn btn-default btn-file">
+                  上传至服务器 <input type="file" id="upload-image-server">
+                </label>
+                <button class="btn btn-info" id="upload-image-btn">上传至七牛云</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="progress-bar" style="display: none">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0;">0%</div>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label for="docs-file-url">视频地址</label>
+            <div class="input-group">
+              {% if course %}
+                <input type="text" class="form-control" id="docs-file-url" name="docs-file-url"
+                       placeholder="请上传视频或输入视频地址" value="{{ course.video_url }}">
+              {% else %}
+                <input type="text" class="form-control" id="docs-file-url" name="docs-file-url"
+                       placeholder="请上传视频或输入视频地址">
+              {% endif %}
+
+              <div class="input-group-btn">
+                <label class="btn btn-default btn-file">
+                  上传至服务器 <input type="file" id="upload-file-server">
+                </label>
+                {#                <button class="btn btn-info">上传至七牛云</button>#}
+              </div>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label for="course-time">课程时长(单位：分钟)</label>
+            {% if course %}
+              <input type="text" class="form-control" id="course-time" name="course-time"
+                     placeholder="请输入课程时长" value="{{ course.duration }}">
+            {% else %}
+              <input type="text" class="form-control" id="course-time" name="course-time"
+                     placeholder="请输入课程时长" autofocus>
+            {% endif %}
+          </div>
+          <div class="form-group">
+            <label for="course-teacher">课程讲师</label>
+            <select name="course-teacher" id="course-teacher" class="form-control">
+              <option value="0">-- 请选择讲师 --</option>
+              {% for teacher in teachers %}
+                {% if course and teacher == course.teacher %}
+                  <option value="{{ teacher.id }}" selected>{{ teacher.name }}</option>
+                {% else %}
+                  <option value="{{ teacher.id }}">{{ teacher.name }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="course-category">课程分类</label>
+            <select name="course-category" id="course-category" class="form-control">
+              <option value="0">-- 请选择分类 --</option>
+              {% for category in categories %}
+                {% if course and category == course.category %}
+                  <option value="{{ category.id }}" selected>{{ category.name }}</option>
+                {% else %}
+                  <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="course-outline">课程大纲</label>
+            {% if course %}
+              <div id="course-outline">
+                 <script>
+                  window.onload = function () {
+                    window.editor.txt.html('{{ course.outline|safe }}')
+                  }
+                </script>
+              </div>
+            {% else %}
+              <div id="course-outline">
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="box-footer">
+          {% if course %}
+            <a href="javascript:void (0);" class="btn btn-primary pull-right" id="btn-pub-news"
+               data-news-id="{{ course.id }}">更新课程 </a>
+          {% else %}
+            <a href="javascript:void (0);" class="btn btn-primary pull-right" id="btn-pub-news">发布课程 </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+ <script src="{% static 'node_modules/@baiducloud/sdk/dist/baidubce-sdk.bundle.min.js' %}"></script>
+  <script src="{% static 'js/admin/news/wangEditor.min.js' %}"></script>
+  <!-- 七牛云 客户端 并不经过服务端 服务器需要提供 token -->
+  <script src="https://cdn.bootcss.com/plupload/2.1.9/moxie.min.js"></script>
+  <script src="https://cdn.bootcss.com/plupload/2.1.9/plupload.dev.js"></script>
+  <script src="https://cdn.bootcss.com/qiniu-js/1.0.17.1/qiniu.min.js"></script>
+  <!--一定要在下面 js 文件顺序很重要 -->
+  <script src="{% static 'js/admin/base/fqiniu.js' %}"></script>
+  <script src="{% static 'js/admin/course/courses_pub.js' %}"></script>
+{% endblock %}

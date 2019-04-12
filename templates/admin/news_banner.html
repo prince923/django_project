@@ -1,0 +1,117 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}
+轮播图管理
+{% endblock %}
+
+{% block page_title %}
+轮播图管理
+{% endblock %}
+
+{% block page_desc %}
+在这里可以对你的轮播图进行管理
+{% endblock %}
+
+{% block content %}
+ <style>
+    .banner-img {
+      width: 328px;
+      height: 82px;
+    }
+
+    .banner-img img {
+      width: 100%;
+      max-height: 100%;
+    }
+
+    .banner-info {
+      margin-left: 20px;
+    }
+
+    .form-group {
+      width: 500px;
+    }
+    ul.banner-list{
+      list-style:none;
+      margin:0;
+      padding:0;
+    }
+    ul.banner-list li.banner-item{
+      margin-top: 20px;
+    }
+    @media screen and (max-width: 1100px) {
+      .form-group {
+        margin-top: 15px;
+      }
+
+      .banner-info {
+        margin: 0;
+      }
+    }
+  </style>
+  <div class="row">
+    <div class="col-lg-6">
+      <button class="btn btn-primary pull-left" id="banner-add-btn"><i class="fa fa-plus"></i> 添加轮播图</button>
+      <ul class="pull-left tips" style="line-height: 18px;">
+        <li>支持 JPG/PNG 格式的图片 最多可上传6张</li>
+        <li>图片的宽度最好在800px以上，比例为4:1</li>
+      </ul>
+    </div>
+  </div>
+  <ul class="banner-list">
+
+    {% for one_banner in banners %}
+
+      <li class="box banner-item box-primary" data-banner-id="{{ one_banner.id }}">
+        <div class="box-header">
+          <span>当前优先级为：<span class="priority-number">{{ one_banner.priority }}</span></span>
+          <a href="javascript:void(0);" class="btn btn-danger btn-xs pull-right close-btn">
+            <i class="fa fa-close"></i>
+          </a>
+        </div>
+        <div class="box-body">
+          <div class="pull-left banner-img">
+            <input type="file" name="banner-image-select" style="display: none;">
+            <img src="{{ one_banner.image_url }}" class="img-thumbnail banner-image">
+          </div>
+          <div class="pull-left banner-info">
+
+            <div class="form-group">
+              <label for="priority" class="control-label" style="margin-bottom: 10px">选择优先级(第一级最高)：</label>
+              <div>
+
+                <select name="priority" id="priority" class="form-control">
+                  <option value="0">--请选择优先级--</option>
+
+                  {% for id, value in priority_dict.items %}
+
+                    {% if id == one_banner.priority %}
+                      <option value="{{ id }}" selected>{{ value }}</option>
+                    {% else %}
+                      <option value="{{ id }}">{{ value }}</option>
+                    {% endif %}
+
+                  {% endfor %}
+
+                </select>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="box-footer">
+          <button class="btn btn-primary pull-right update-btn" data-image-url="{{ one_banner.image_url }}"
+                  data-priority="{{ one_banner.priority }}">更新
+          </button>
+        </div>
+      </li>
+
+    {% endfor %}
+
+  </ul>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/admin/banners/banner_edit.js' %}"></script>
+{% endblock %}

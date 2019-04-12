@@ -1,0 +1,95 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}
+添加轮播图
+{% endblock %}
+
+{% block page_title %}
+添加轮播图
+{% endblock %}
+
+{% block page_desc %}
+在这里可以添加你的轮播图
+{% endblock %}
+
+{% block link %}
+
+{% endblock %}
+
+
+{% block content %}
+  <style>
+    .banner-img {
+      width: 40%;
+      margin: 10px 300px 20px;
+    }
+
+    .banner-img img {
+      width: 100%;
+      max-height: 100%;
+    }
+
+    @media screen and (max-width: 1100px) {
+      .form-group {
+        margin-top: 15px;
+      }
+    }
+  </style>
+
+  <div class="box box-primary">
+    <div class="box-body">
+      <div class="form-horizontal">
+
+        <div class="form-group">
+          <div class="pull-left banner-img">
+            <input type="file" name="banner-image-select" style="display: none;">
+            <img src="{% static 'images/banner_default.png' %}" class="img-thumbnail banner-image">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="category-select" class="col-md-2 col-sm-2 control-label">选择文章分类</label>
+          <div class="col-md-2 col-sm-3">
+            <select name="category" id="category-select" class="form-control input-md">
+              <option value="0">--请选择文章分类--</option>
+
+              {% for one_tag in tags %}
+                <option value="{{ one_tag.id }}">{{ one_tag.tag_name }}</option>
+              {% endfor %}
+
+            </select>
+          </div>
+          <div class="col-md-8 col-sm-7">
+            <label for="news-select" style="display: none;"></label>
+            <select name="news" class="form-control input-md" id="news-select">
+              <option value="0">--请选择文章--</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="priority" class="col-md-2 col-sm-2 control-label">选择优先级</label>
+
+          <div class="col-md-2 col-sm-3">
+            <select name="priority" id="priority" class="form-control input-md">
+              <option value="0">--请选择优先级--</option>
+
+              {% for id, value in priority_dict.items %}
+                <option value="{{ id }}">{{ value }}</option>
+              {% endfor %}
+
+            </select>
+
+          </div>
+        </div>
+
+      </div>
+      <div class="box-footer">
+        <a href="javascript:void(0);" class="btn btn-primary pull-right" id="save-btn">保存</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/admin/banners/news_banner_add.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}
+文档管理
+{% endblock %}
+
+{% block page_title %}
+文档管理
+{% endblock %}
+
+{% block page_desc %}
+在这里可以管理你的文档
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+      <div class="box box-primary">
+        <div class="box-body">
+          <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+              <th>文档标题</th>
+              <th>创建时间</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            {% for one_doc in docs %}
+              <tr data-id="{{ one_doc.id }}" data-name="{{ one_doc.title }}">
+                <td>{{ one_doc.title }}</td>
+                <td>{{ one_doc.update_time|date:'Y年m月d日' }}</td>
+                <td>
+                  <a href="{% url 'admin:doc_edit'  one_doc.id %} " class="btn btn-xs btn-warning btn-edit">编辑</a>
+                  <button class="btn btn-xs btn-danger btn-del">删除</button>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/admin/docs/docs_manage.js' %}"></script>
+{% endblock %}

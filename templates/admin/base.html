@@ -279,15 +279,15 @@ desired effect
             <li><a href="{% url 'admin:news_pub' %}"><i class="fa fa-skyatlas"></i>文章发布</a></li>
             <li><a href="{% url 'admin:news_manage' %}"><i class="fa fa-gear"></i>文章管理</a></li>
             <li><a href="{% url 'admin:hot_news' %}"><i class="fa fa-fire"></i>热门文章</a></li>
-            <li><a href="#"><i class="fa fa-image"></i>轮播图管理</a></li>
+            <li><a href="{% url 'admin:banner_manager' %}"><i class="fa fa-image"></i>轮播图管理</a></li>
           </ul>
         </li>
           <li class="header">文档相关</li>
-          <li><a href="#"><i class="fa fa-file-text"></i> <span>文档管理</span></a></li>
-          <li><a href="#"><i class="fa fa-send (alias)"></i> <span>文档发布</span></a></li>
+          <li><a href="{% url 'admin:doc_manager' %}"><i class="fa fa-file-text"></i> <span>文档管理</span></a></li>
+          <li><a href="{% url 'admin:doc_pub' %}"><i class="fa fa-send (alias)"></i> <span>文档发布</span></a></li>
           <li class="header">在线课堂</li>
-          <li><a href="#"><i class="fa fa-youtube-play"></i> <span>课程管理</span></a></li>
-          <li><a href="#"><i class="fa fa-table"></i> <span>课程修改</span></a></li>
+          <li><a href="{% url 'admin:courses_manage' %}"><i class="fa fa-youtube-play"></i> <span>课程管理</span></a></li>
+          <li><a href="{% url 'admin:courses_pub' %}"><i class="fa fa-table"></i> <span>课程发布</span></a></li>
          <li class="header">权限相关</li>
           <li><a href="#"><i class="fa  fa-paperclip"></i> <span>组管理</span></a></li>
           <li><a href="#"><i class="fa  fa-list"></i> <span>组创建</span></a></li>

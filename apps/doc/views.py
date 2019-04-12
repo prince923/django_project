@@ -26,13 +26,13 @@ def down_doc(request, doc_id):
     doc = DocModel.objects.only('id').filter(id=doc_id, is_delete=False).first()
     if doc:
         doc_url = doc.file_url
-        full_url = settings.SITE_NAME + doc_url
+        # full_url = settings.SITE_NAME + doc_url
         try:
-            res = FileResponse(requests.get(full_url, stream=True))
+            res = FileResponse(requests.get(doc_url, stream=True))
         except Exception as e:
             logger.error('获取文件异常{}'.format(e))
             raise Http404('<h1>文件未找到<h1>')
-        ex_name = full_url.split('.')[-1]   # 取文件扩展名
+        ex_name = doc_url.split('.')[-1]   # 取文件扩展名
         if not ex_name:
             return Http404('文件异常')
         else:
