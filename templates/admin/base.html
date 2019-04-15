@@ -289,9 +289,9 @@ desired effect
           <li><a href="{% url 'admin:courses_manage' %}"><i class="fa fa-youtube-play"></i> <span>课程管理</span></a></li>
           <li><a href="{% url 'admin:courses_pub' %}"><i class="fa fa-table"></i> <span>课程发布</span></a></li>
          <li class="header">权限相关</li>
-          <li><a href="#"><i class="fa  fa-paperclip"></i> <span>组管理</span></a></li>
-          <li><a href="#"><i class="fa  fa-list"></i> <span>组创建</span></a></li>
-          <li><a href="#"><i class="fa fa-user"></i> <span>用户管理</span></a></li>
+          <li><a href="{% url 'admin:groups_manage' %}"><i class="fa  fa-paperclip"></i> <span>组管理</span></a></li>
+          <li><a href="{% url 'admin:groups_add' %}"><i class="fa  fa-list"></i> <span>组创建</span></a></li>
+          <li><a href="{% url 'admin:user_manage' %}"><i class="fa fa-user"></i> <span>用户管理</span></a></li>
       </ul>
       <!-- /.sidebar-menu -->
     </section>

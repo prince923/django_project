@@ -1,0 +1,98 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}
+用户编辑
+{% endblock %}
+
+{% block page_title %}
+用户编辑
+{% endblock %}
+
+{% block page_desc %}
+在这里可以编辑用户
+{% endblock %}
+
+{% block content %}
+  <style>
+    span {
+      font-weight: 700;
+      margin-top: 30px;
+    }
+    .form-check-label {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.428;
+    }
+  </style>
+
+  <div class="row">
+    <div class="col-md-12 col-xs-12 col-sm-12">
+      <div class="box box-primary">
+        <div class="box-body">
+
+          <div><span>用户名：</span><strong style="color: #ff851b;">{{ user_instance.username }}</strong></div>
+
+          <div><span>是否能登录后台？(is_staff)</span></div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="login_admin" id="login_admin1" value="1"
+            {% if user_instance.is_staff %} checked {% endif %}>
+            <label class="form-check-label" for="login_admin">是</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="login_admin" id="login_admin2" value="0"
+            {% if not user_instance.is_staff %} checked {% endif %}>
+            <label class="form-check-label" for="login_admin">否</label>
+          </div>
+
+          <div><span>是否是超级管理员？(is_superuser)</span></div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="is_superuser" id="login_admin1" value="1"
+            {% if user_instance.is_superuser %} checked {% endif %}>
+            <label class="form-check-label" for="is_superuser">是</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="is_superuser" id="login_admin2" value="0"
+            {% if not user_instance.is_superuser %} checked {% endif %}>
+            <label class="form-check-label" for="is_superuser">否</label>
+          </div>
+
+          <div><span>是否激活？(is_active)</span></div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="is_active" id="login_admin1" value="1"
+            {% if user_instance.is_active %} checked {% endif %}>
+            <label class="form-check-label" for="is_active">是</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="is_active" id="login_admin2" value="0"
+            {% if not user_instance.is_active %} checked {% endif %}>
+            <label class="form-check-label" for="is_active">否</label>
+          </div>
+
+          <div class="form-group" style="margin-top: 15px">
+            <label for="add-group">所属组(按住 ”Control“，或者Mac上的 “Command”，可以选择多个。)</label>
+            <select multiple class="form-control" name="add_group" id="add_group"
+                    style="height: 150px; margin-top: 20px">
+              {% for one_group in groups %}
+                {% if one_group in user_instance.groups.all %}
+                  <option value="{{ one_group.id }}" title="{{ one_group.name }}" selected>
+                    {{ one_group.name }}</option>
+                {% else %}
+                  <option value="{{ one_group.id }}"
+                          title="{{ one_group.name }}">{{ one_group.name }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="box-footer">
+            <a href="javascript:void (0);" class="btn btn-primary pull-right" id="btn-edit-user"
+               data-user-id="{{ user_instance.id }}">更新用户 </a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/admin/permission/user_manage.js' %}"></script>
+{% endblock %}

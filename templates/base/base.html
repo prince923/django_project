@@ -38,8 +38,13 @@
         <i class="PyWhich py-user"></i>
         <span>{{ user }}</span>
         <ul class="author-menu">
-          <li><a href="javascript:void(0);">后台管理</a></li>
+            {% if user.is_staff %}
+            <li><a href="{% url 'admin:index' %}">后台管理</a></li>
           <li><a href="{% url 'user:logout' %}">退出登录</a></li>
+                {% else %}
+                <li><a href="{% url 'user:logout' %}">退出登录</a></li>
+            {% endif %}
+
         </ul>
         </div>
         {% else %}
@@ -73,7 +78,7 @@
 						<a href="javascript:void(0)">人生苦短</a> |
 						<a href="javascript:void(0)">我用Python</a>
 					</span>
-        <span class="about-me">关于我: <i class="PyWhich py-wechat"></i> Youkou</span>
+        <span class="about-me">关于我: <i class="PyWhich py-wechat"></i> wyf</span>
       </p>
       <p class="bottom-content">
         <span>地址： xxxx</span>

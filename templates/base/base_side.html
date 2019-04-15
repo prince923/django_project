@@ -39,8 +39,13 @@
         <i class="PyWhich py-user"></i>
         <span>{{ user }}</span>
         <ul class="author-menu">
-          <li><a href="javascript:void(0);">后台管理</a></li>
+            {% if user.is_staff %}
+             <li><a href="{% url 'admin:index' %}">后台管理</a></li>
           <li><a href="{% url 'user:logout' %}">退出登录</a></li>
+                {% else %}
+                <li><a href="{% url 'user:logout' %}">退出登录</a></li>
+            {% endif %}
+
         </ul>
         </div>
         {% else %}
@@ -95,15 +100,15 @@
               <h3 class="attention-title">关注我</h3>
               <ul class="side-attention-address">
                   <li>
-                      <a href="javascript:void(0);" target="_blank"><i class="PyWhich py-GitHub"></i>Youkou</a>
+                      <a href="javascript:void(0);" target="_blank"><i class="PyWhich py-GitHub"></i>wyf</a>
                   </li>
                   <li>
                       <a href="javascript:void(0);" target="_blank"><i class="PyWhich py-zhihu"
-                                                                       style="color:rgb(0, 108, 226);"></i>Youkou</a>
+                                                                       style="color:rgb(0, 108, 226);"></i>wyf</a>
                   </li>
                   <li>
                       <a href="javascript:void(0);" target="_blank"><i class="PyWhich py-weibo"
-                                                                       style="color:rgb(245,92,110);"></i>Youkou</a>
+                                                                       style="color:rgb(245,92,110);"></i>wyf</a>
                   </li>
               </ul>
               <div class="side-attention-qr">

@@ -27,4 +27,9 @@ urlpatterns = [
     path('courses/',views.CourseManageView.as_view(), name='courses_manage'),
     path('courses/<int:course_id>/',views.CourseEditView.as_view(), name='courses_edit'),
     path('courses/pub/',views.CoursePubView.as_view(), name='courses_pub'),
+    path('groups/add/',views.GroupAddView.as_view(), name='groups_add'),
+    path('groups/',views.GroupManageView.as_view(), name='groups_manage'),
+    path('groups/<int:group_id>/',views.GroupEditView.as_view(), name='groups_edit'),
+    path('users/',views.UserManageView.as_view(),name='user_manage'),
+    path('users/<int:user_id>/',views.UserEditView.as_view(),name='user_edit'),
 ]

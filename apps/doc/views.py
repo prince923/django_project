@@ -6,6 +6,7 @@ from .models import DocModel
 from django.conf import settings
 import requests
 import logging
+from django.contrib.auth.decorators import login_required
 
 # Create your views here
 logger = logging.getLogger('django')  # 导入日志器
@@ -17,6 +18,7 @@ class DocIndex(View):
         return render(request, 'doc/docDownload.html', locals())
 
 
+@login_required
 def down_doc(request, doc_id):
     """
 
@@ -32,7 +34,7 @@ def down_doc(request, doc_id):
         except Exception as e:
             logger.error('获取文件异常{}'.format(e))
             raise Http404('<h1>文件未找到<h1>')
-        ex_name = doc_url.split('.')[-1]   # 取文件扩展名
+        ex_name = doc_url.split('.')[-1]  # 取文件扩展名
         if not ex_name:
             return Http404('文件异常')
         else:

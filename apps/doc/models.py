@@ -17,7 +17,7 @@ class DocModel(BaseModel):
 
     class Meta:
         db_table = "tb_docs"  # 指明数据库表名
-        verbose_name = "用户"  # 在admin站点中显示的名称
+        verbose_name = "文档"  # 在admin站点中显示的名称
         verbose_name_plural = verbose_name  # 显示的复数名称
 
     def __str__(self):

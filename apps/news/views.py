@@ -11,6 +11,7 @@ from . import constant
 import json
 from haystack.views import SearchView as _SearchView
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 logger = logging.getLogger('django')
 
@@ -81,7 +82,7 @@ class NewsList(View):
         return to_json_data(data=data)
 
 
-class NewsDetailView(View):
+class NewsDetailView(LoginRequiredMixin,View):
     """
    create  news_detail and news comments  View
     """
