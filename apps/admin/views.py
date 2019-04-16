@@ -915,7 +915,7 @@ class GroupEditView(PermissionRequiredMixin, View):
             return render(request, 'admin/groups_add.html', locals())
 
     def delete(self, request, group_id):
-        group = Group.objects.only('id').first()
+        group = Group.objects.only('id').filter(id=group_id).first()
         if not group:
             return to_json_data(errno=Code.NODATA, errmsg='此组不存在')
         else:
