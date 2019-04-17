@@ -1,5 +1,5 @@
 from django.contrib.auth import login, logout
-from django.shortcuts import render, redirect,reverse
+from django.shortcuts import render, redirect, reverse
 from django.views import View
 import json
 import random
@@ -35,10 +35,10 @@ class LoginView(View):
             return to_json_data(errno=Code.NODATA, errmsg=error_map[Code.NODATA])
         else:
             dict_data = json.loads(json_data.decode('utf8'))
-        form = LoginForm(data=dict_data,request=request)
+        form = LoginForm(data=dict_data, request=request)
         if form.is_valid():
             logger.info('login success {}'.format(request.user))
-            return to_json_data(errno=Code.OK,errmsg='登陆成功')
+            return to_json_data(errno=Code.OK, errmsg='登陆成功')
         else:
             # 定义一个错误信息列表
             err_msg_list = []
@@ -53,7 +53,6 @@ class LogoutView(View):
     def get(self, request: object) -> object:
         logout(request)
         return redirect('/user/login/')
-
 
 
 class RegisterView(View):
