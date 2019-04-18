@@ -13,6 +13,7 @@ from verification import constant
 from utils.json_fun import to_json_data
 from utils.res_code import Code, error_map
 from utils.yuntongxun.sms import CCP
+from celery_tasks.sms.tasks import send_sms_code
 
 logger = logging.getLogger('django')  # 导入日志器
 
@@ -149,6 +150,8 @@ class SmsCodes(View):
             #     else:
             #         logger.error("手机号{}短信验证码{}发送异常".format(mobile, sms_code))
             #         return to_json_data(errno=Code.SMSERROR, errmsg=error_map[Code.SMSERROR])
+            celery_res = send_sms_code.delay(mobile,sms_code,5,1)
+            logger.info("发送验证码短信[正常][ mobile: %s sms_code: %s]" % (mobile, sms_code))
             return to_json_data(errmsg="发送短信验证码成功")
         else:
             # 定义一个错误信息列表
