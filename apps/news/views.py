@@ -12,13 +12,15 @@ import json
 from haystack.views import SearchView as _SearchView
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 logger = logging.getLogger('django')
 
 
 # Create your views here.
 
-
+@method_decorator(cache_page(timeout=120, cache='page_cache'), name='dispatch')
 class IndexView(View):
     def get(self, request: object) -> object:
         tags = TagModel.objects.only('tag_name').filter(is_delete=False)  # only 会改变查询语句，只会查询  id  tag_name 字段
@@ -30,6 +32,7 @@ class IndexView(View):
         pass
 
 
+@method_decorator(cache_page(timeout=120, cache='page_cache'), name='dispatch')
 class NewsList(View):
     """
     新闻列表
@@ -142,6 +145,7 @@ class NewsDetailView(LoginRequiredMixin,View):
             return to_json_data(errno=Code.NODATA, errmsg='新闻不存在')
 
 
+@method_decorator(cache_page(timeout=120, cache='page_cache'), name='dispatch')
 class NewsBannerView(View):
     """
     create news_banner  View
